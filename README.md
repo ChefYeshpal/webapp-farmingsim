@@ -6,6 +6,8 @@ In this game, the user is a farmer, who got a small plot of land from their gran
 ## Stuff I wanna add
 
 - [ ] Farm land
+    - Should be divided into 9 chunks, the player initially has access to the bottom right chunk
+    - Other chunks can be bought for a certain price, with their price being different depending on how far they are
 - [ ] A tractor
     - Should be controllable via wasd or arrow keys
     - Should be upgradable?
@@ -29,3 +31,7 @@ In this game, the user is a farmer, who got a small plot of land from their gran
 
 - 4 November 2025
     - Created `index.html`, `styles.css`, and `scripts/`
+    - Created the basic board
+        - Has a border
+        - Is right aligned
+        - thinking that left will have the status of different seasons and everything?

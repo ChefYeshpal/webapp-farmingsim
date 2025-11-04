@@ -18,3 +18,30 @@ body {
 canvas {
     display: block;
 }
+
+html, body {
+    height: 100%;
+}
+
+#game-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-top: 12px;
+    padding-right: 48px;
+    padding-left: 24px;
+}
+
+canvas {
+    display: block;
+    margin: 0;
+    width: 600px;
+    max-width: 100%;
+    height: auto;
+}
