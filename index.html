@@ -7,10 +7,45 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
+        <div id="ui-panel">
+            <div class="ui-section">
+                <div class="date-display" id="date-display">Day 1, Spring, Year 1</div>
+            </div>
+            
+            <div class="ui-section">
+                <div class="progress-bar-container">
+                    <div class="progress-bar-track"></div>
+                    <div class="progress-bar-fill" id="year-progress"></div>
+                    <div class="progress-indicator" id="progress-indicator"></div>
+                </div>
+                <div class="time-controls">
+                    <button class="time-control-btn" id="pause-btn" title="Pause/Play">||</button>
+                    <button class="time-control-btn" id="speed-2x-btn" title="2x Speed">&gt;</button>
+                    <button class="time-control-btn" id="speed-5x-btn" title="5x Speed">&gt;&gt;</button>
+                </div>
+            </div>
+            
+            <div class="ui-section">
+                <div class="info-label">Season</div>
+                <div class="info-value" id="season-display">Spring</div>
+            </div>
+            
+            <div class="ui-section">
+                <div class="info-label">Crop</div>
+                <div class="info-value" id="crop-display">None</div>
+            </div>
+            
+            <div class="ui-section">
+                <div class="info-label">Money</div>
+                <div class="info-value" id="money-display">$500</div>
+            </div>
+        </div>
+        
         <div id="game-container">
             <canvas id="gameCanvas"></canvas>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <script src="scripts/ui.js"></script>
     <script src="scripts/script.js"></script>
     <script src="scripts/playermovement.js"></script>
     <script src="scripts/scene.js"></script>
