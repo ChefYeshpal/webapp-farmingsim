@@ -56,12 +56,12 @@ canvas {
 
 #ui-panel {
     position: absolute;
-    top: 24px;
-    left: 34px;
+    top: 30px;
+    left: 70px;
     width: 500px;
     max-height: calc(100vh - 48px);
     background-color: #e8d4a8;
-    border: 3px solid #8B4513;
+    border: 4px dashed #8B4513;
     border-radius: 16px;
     padding: 20px;
     display: flex;
@@ -70,6 +70,8 @@ canvas {
     flex-shrink: 0;
     z-index: 10;
     overflow-y: auto;
+    outline: 4px dashed #8B4513;
+    outline-offset: 4px;
 }
 
 .ui-section {
