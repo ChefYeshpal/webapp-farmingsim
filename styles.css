@@ -38,6 +38,17 @@ html, body {
     padding-left: 24px;
 }
 
+#tractor-overlay {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 36px;
+    height: auto;
+    z-index: 20;
+    pointer-events: none;
+    image-rendering: optimizeQuality;
+}
+
 canvas {
     display: block;
     margin: 0;

@@ -17,7 +17,11 @@ const COLORS = {
 function setup() {
     let canvas = createCanvas(CANVAS_SIZE, CANVAS_SIZE);
     canvas.parent('game-container');
-    noLoop(); // static for now, use loop() afterwards, just adding this so I remember what this does
+    // enable continuous draw for moving objects
+    // noLoop(); // static for now, use loop() afterwards, just adding this so I remember what this does
+
+    // player setup (playermovement.js)
+    if (typeof setupPlayer === 'function') setupPlayer();
 }
 
 function draw() {
@@ -25,6 +29,8 @@ function draw() {
     drawField();
     drawGrid();
     drawFence();
+    if (typeof updatePlayer === 'function') updatePlayer();
+    if (typeof drawPlayer === 'function') drawPlayer();
 }
 
 function drawField() {

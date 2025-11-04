@@ -35,3 +35,7 @@ In this game, the user is a farmer, who got a small plot of land from their gran
         - Has a border
         - Is right aligned
         - thinking that left will have the status of different seasons and everything?
+    - Added a tractor
+        - Player can move with wasd
+            - w/s pushes forwards/backwards
+            - a/d turns right/left
