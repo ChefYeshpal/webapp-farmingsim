@@ -7,16 +7,12 @@
 body {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    padding: 0;
+    margin: 0;
     height: 100vh;
     background: linear-gradient(135deg, #f4e4c1 0%, #e8d4a8 100%);
-    font-family: Arial, Helvetica, sans-serif
-}
-
-#game-container {
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 canvas {

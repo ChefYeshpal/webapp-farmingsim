@@ -1,7 +1,7 @@
 const CANVAS_SIZE = 600;
-const GRID_SIZE = 2;
+const GRID_SIZE = 3;
 const CELL_SIZE = CANVAS_SIZE / GRID_SIZE;
-const BORDER_WIDTH = 40;
+const BORDER_WIDTH = 20;
 const PLAY_AREA = CANVAS_SIZE - (BORDER_WIDTH * 2);
 
 const COLORS = {
@@ -15,7 +15,8 @@ const COLORS = {
 }
 
 function setup() {
-    createCanvas(CANVAS_SIZE, CANVAS_SIZE);
+    let canvas = createCanvas(CANVAS_SIZE, CANVAS_SIZE);
+    canvas.parent('game-container');
     noLoop(); // static for now, use loop() afterwards, just adding this so I remember what this does
 }
 
