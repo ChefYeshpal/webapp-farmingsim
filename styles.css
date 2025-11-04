@@ -5,17 +5,13 @@
 }
 
 body {
-    display: flex;
-    justify-content: flex-start;
-    align-items: stretch;
+    position: relative;
     padding: 24px;
-    padding-left: 24px;
-    padding-right: 24px;
     margin: 0;
     height: 100vh;
     background: linear-gradient(135deg, #f4e4c1 0%, #e8d4a8 100%);
     font-family: Arial, Helvetica, sans-serif;
-    gap: 0;
+    overflow: hidden;
 }
 
 canvas {
@@ -27,13 +23,16 @@ html, body {
 }
 
 #game-container {
-    position: relative;
-    margin: 0 auto;
-    max-width: 811px;
-    height: 599px;
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1;
 }
 
 #tractor-overlay {
@@ -56,10 +55,11 @@ canvas {
 }
 
 #ui-panel {
-    position: relative;
-    width: 240px;
-    min-height: 100%;
-    margin-right: 24px;
+    position: absolute;
+    top: 24px;
+    left: 34px;
+    width: 500px;
+    max-height: calc(100vh - 48px);
     background-color: #e8d4a8;
     border: 3px solid #8B4513;
     border-radius: 16px;
@@ -68,6 +68,8 @@ canvas {
     flex-direction: column;
     gap: 16px;
     flex-shrink: 0;
+    z-index: 10;
+    overflow-y: auto;
 }
 
 .ui-section {
