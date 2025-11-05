@@ -5,14 +5,19 @@ const BORDER_WIDTH = 20;
 const PLAY_AREA = CANVAS_SIZE - (BORDER_WIDTH * 2);
 
 const COLORS = {
-    wheat: '#F5DEB3',
+    wheat: '#794707e5',
     darkWheat: '#DDA15E',
     lightWheat: '#FEFAE0',
     border: '#8B4513',
     fencePost: '#654321',
-    ground: '#BC6C25',
+    ground: '#8B5A2B',
+    groundLight: '#B97A46',
     gridLine: '#D4A574'
 }
+
+let baseStripesLayer;
+let coverLayer
+let _lastTilled = { x: -9999, y: -9999 };
 
 function setup() {
     let canvas = createCanvas(CANVAS_SIZE, CANVAS_SIZE);
@@ -22,21 +27,83 @@ function setup() {
 
     // player setup (playermovement.js)
     if (typeof setupPlayer === 'function') setupPlayer();
+
+    baseStripesLayer = createGraphics(PLAY_AREA, PLAY_AREA);
+    coverLayer = createGraphics(PLAY_AREA, PLAY_AREA);
+
+    const stripeW = 8;
+    baseStripesLayer.noStroke();
+    for (let x = 0, i = 0; x < PLAY_AREA; x += stripeW) {
+        baseStripesLayer.fill(i % 2 === 0 ? COLORS.ground : COLORS.groundLight);
+        baseStripesLayer.rect(x, 0, stripeW, PLAY_AREA);
+        i++;
+    }
+    coverLayer.noStroke();
+    coverLayer.fill(COLORS.wheat);
+    coverLayer.rect(0, 0, PLAY_AREA, PLAY_AREA);
 }
 
 function draw() {
-    background(COLORS.ground);
+    background('#aac57a');
     drawField();
+    drawBaseAndCover();
     drawGrid();
     drawFence();
     if (typeof updatePlayer === 'function') updatePlayer();
+    if (typeof getPlayerState === 'function') {
+        const p = getPlayerState();
+        maybeEraseCover(p.x, p.y, p);
+    }
     if (typeof drawPlayer === 'function') drawPlayer();
 }
 
 function drawField() {
-    fill(COLORS.wheat);
-    noStroke(); // heh, heart stroke
+    fill(COLORS.ground);
+    noStroke();
     rect(BORDER_WIDTH, BORDER_WIDTH, PLAY_AREA, PLAY_AREA);
+}
+
+function drawTilledLayer() {
+    // deprecreated
+}
+
+function drawBaseAndCover() {
+    if (!baseStripesLayer || !coverLayer) return;
+    push();
+    imageMode(CORNER);
+    image(baseStripesLayer, BORDER_WIDTH, BORDER_WIDTH);
+    image(coverLayer, BORDER_WIDTH, BORDER_WIDTH);
+    pop();
+}
+
+function maybeEraseCover(canvasX, canvasY, playerState) {
+    if (!coverLayer) return;
+    if (canvasX < BORDER_WIDTH || canvasX > CANVAS_SIZE - BORDER_WIDTH) return;
+    if (canvasY < BORDER_WIDTH || canvasY > CANVAS_SIZE - BORDER_WIDTH) return;
+
+    const dx = canvasX - _lastTilled.x;
+    const dy = canvasY - _lastTilled.y;
+    const distSq = dx * dx + dy * dy;
+    const minDist = 6; 
+    if (distSq < minDist * minDist) return;
+
+    const localX = canvasX - BORDER_WIDTH;
+    const localY = canvasY - BORDER_WIDTH;
+
+    eraseCoverAt(localX, localY, playerState);
+    _lastTilled.x = canvasX;
+    _lastTilled.y = canvasY;
+}
+
+function eraseCoverAt(localX, localY, playerState) {
+    const w = 48;
+    const h = 56;
+
+    coverLayer.push();
+    coverLayer.erase();
+    coverLayer.ellipse(localX, localY, w, h);
+    coverLayer.noErase();
+    coverLayer.pop();
 }
 
 function drawGrid() {

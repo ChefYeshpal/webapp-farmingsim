@@ -50,3 +50,8 @@ In this game, the user is a farmer, who got a small plot of land from their gran
         - Player can move with wasd
             - w/s pushes forwards/backwards
             - a/d turns right/left
+    - Added a info window
+        - Has year, crop, day, and progress
+        - Nothing works as of yet tho
+- 5 November 2025
+    -
