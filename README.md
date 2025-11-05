@@ -54,4 +54,9 @@ In this game, the user is a farmer, who got a small plot of land from their gran
         - Has year, crop, day, and progress
         - Nothing works as of yet tho
 - 5 November 2025
-    -
+    - Added tilling mechanics
+        - Land looks like dirt initially
+        - Move the tractor over it, and boom! you tilled the land
+        - You can also make some pretty cool stuff with this...
+    - Tried to add land buying mechanics
+        - Not really working out rn, will have to think it over a bit more
