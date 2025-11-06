@@ -11,9 +11,7 @@ class CropManager {
         this.plantYesBtn = null;
         this.plantNoBtn = null;
         
-        // Threshold for showing the planting dialog (0.8% of owned land tilled - lowered for easier testing)
-        // This means tilled land should be about 0.8% of the land area (roughly 279 pixels for a single plot, yeah I wipped out the calculator for this)
-        this.tillingThreshold = 0.8;
+        this.tillingThreshold = 65;
     }
     
     init() {
