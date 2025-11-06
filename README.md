@@ -60,3 +60,11 @@ In this game, the user is a farmer, who got a small plot of land from their gran
         - You can also make some pretty cool stuff with this...
     - Tried to add land buying mechanics
         - Not really working out rn, will have to think it over a bit more
+- 6 November 2025
+    - Added land purchase options
+        - Can now use arrow keys to navigate and purchase the land
+        - Bad touching the land button, or pressing `b` starts the purchase thing
+        - There's a confirmation dialogue as well now
+            - Enter gives yes
+            - Esc gives no
+        - Can ONLY buy land adjacent to the ones you own

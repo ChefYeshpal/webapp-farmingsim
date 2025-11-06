@@ -5,7 +5,6 @@ class GameUI {
         this.currentDay = 1;
         this.currentSeason = 'Spring';
         this.currentYear = 1;
-        this.money = 500;
         this.currentCrop = 'None';
         this.seasons = ['Spring', 'Summer', 'Fall', 'Winter'];
         this.daysPerSeason = 28;
@@ -13,11 +12,12 @@ class GameUI {
         this.dateDisplay = null;
         this.seasonDisplay = null;
         this.cropDisplay = null;
-        this.moneyDisplay = null;
+        this.landDisplay = null;
         this.yearProgress = null;
         this.progressIndicator = null;
+        this.ownedLandCount = 1;
+        this.totalLandCount = 9;
         
-        // Time control properties
         this.isPaused = false;
         this.timeMultiplier = 1;
         this.pauseBtn = null;
@@ -29,7 +29,7 @@ class GameUI {
         this.dateDisplay = document.getElementById('date-display');
         this.seasonDisplay = document.getElementById('season-display');
         this.cropDisplay = document.getElementById('crop-display');
-        this.moneyDisplay = document.getElementById('money-display');
+        this.landDisplay = document.getElementById('land-display');
         this.yearProgress = document.getElementById('year-progress');
         this.progressIndicator = document.getElementById('progress-indicator');
 
@@ -115,8 +115,8 @@ class GameUI {
             this.cropDisplay.textContent = this.currentCrop;
         }
         
-        if (this.moneyDisplay) {
-            this.moneyDisplay.textContent = `$${this.money}`;
+        if (this.landDisplay) {
+            this.landDisplay.textContent = `${this.ownedLandCount}/${this.totalLandCount}`;
         }
         
         this.updateProgressBar();
@@ -157,19 +157,15 @@ class GameUI {
         }
     }
     
-    setMoney(amount) {
-        this.money = amount;
-        this.updateDisplay();
+    addLand() {
+        if (this.ownedLandCount < this.totalLandCount) {
+            this.ownedLandCount++;
+            this.updateDisplay();
+        }
     }
     
-    addMoney(amount) {
-        this.money += amount;
-        this.updateDisplay();
-    }
-    
-    subtractMoney(amount) {
-        this.money -= amount;
-        this.updateDisplay();
+    getOwnedLandCount() {
+        return this.ownedLandCount;
     }
     
     setCrop(cropName) {
@@ -182,7 +178,7 @@ class GameUI {
             day: this.currentDay,
             season: this.currentSeason,
             year: this.currentYear,
-            money: this.money,
+            ownedLand: this.ownedLandCount,
             crop: this.currentCrop
         };
     }
@@ -190,7 +186,7 @@ class GameUI {
 
 const gameUI = new GameUI();
 
-// Initialize when DOM is ready
+// Initialize when DOM is ready, how does olof have future generations? like... will elsa make him a kid out of snow?
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         gameUI.init();

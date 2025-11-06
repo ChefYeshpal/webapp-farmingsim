@@ -49,6 +49,12 @@ function draw() {
     drawBaseAndCover();
     drawGrid();
     drawFence();
+    
+    // land selection highlights
+    if (typeof landManager !== 'undefined' && landManager.drawLandHighlights) {
+        landManager.drawLandHighlights();
+    }
+    
     if (typeof updatePlayer === 'function') updatePlayer();
     if (typeof getPlayerState === 'function') {
         const p = getPlayerState();
@@ -64,7 +70,7 @@ function drawField() {
 }
 
 function drawTilledLayer() {
-    // deprecreated
+    // deprecreated, but I wanna keep this here
 }
 
 function drawBaseAndCover() {
