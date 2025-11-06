@@ -41,12 +41,23 @@ function setup() {
     coverLayer.noStroke();
     coverLayer.fill(COLORS.wheat);
     coverLayer.rect(0, 0, PLAY_AREA, PLAY_AREA);
+    
+    // Initialize crop manager
+    if (typeof cropManager !== 'undefined') {
+        cropManager.init();
+    }
 }
 
 function draw() {
     background('#aac57a');
     drawField();
     drawBaseAndCover();
+    
+    // *seed the land*
+    if (typeof cropManager !== 'undefined') {
+        cropManager.drawSeeds();
+    }
+    
     drawGrid();
     drawFence();
     
@@ -110,6 +121,11 @@ function eraseCoverAt(localX, localY, playerState) {
     coverLayer.ellipse(localX, localY, w, h);
     coverLayer.noErase();
     coverLayer.pop();
+    
+    // Record tilling in crop manager
+    if (typeof cropManager !== 'undefined') {
+        cropManager.recordTilling(localX, localY);
+    }
 }
 
 function drawGrid() {

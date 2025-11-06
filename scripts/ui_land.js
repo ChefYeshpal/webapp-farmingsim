@@ -84,6 +84,11 @@ class LandPurchaseManager {
             }
             return;
         }
+        
+        // check for planting dialogue
+        if (typeof cropManager !== 'undefined' && cropManager.isPlantingDialogOpen && cropManager.isPlantingDialogOpen()) {
+            return;
+        }
 
         if (e.key === 'b') {
             e.preventDefault();

@@ -23,8 +23,10 @@ In this game, the user is a farmer, who got a small plot of land from their gran
     - [ ] Time progression
 - [ ] Some seasons?
     - UI should be kinda based on them?
-- [ ] Ability to buy neighbouring land
-    - [ ] Considering the game container would be divided into 9 parts, and user has initially only 1 part
+- [x] Ability to buy neighbouring land
+    - [x] Considering the game container would be divided into 9 parts, and user has initially only 1 part
+    - [x] Can use arrow keys to navigate land purchase
+    - [x] Hotkey for land perch start (`b`)
 - [ ] Seasonal crop variation
     - [ ] if they plant the wrong crop in the wrong season then crop can fail
     - [ ] Check how to do this though...
@@ -68,3 +70,8 @@ In this game, the user is a farmer, who got a small plot of land from their gran
             - Enter gives yes
             - Esc gives no
         - Can ONLY buy land adjacent to the ones you own
+        - Tractor can only move to the land user owns
+        - Added planting function
+            - When 80% of the land is tilled (tillet??) then a box would pop up
+            - Box basically tells them they gotta seed the ground (calm down buddy)
+        
