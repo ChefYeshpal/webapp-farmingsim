@@ -31,6 +31,21 @@ function setupPlayer() {
 	player.speed = 0;
 }
 
+function isPlayerOnOwnedLand(x, y) {
+    if (typeof landManager === 'undefined') {
+        console.error('LandManager is not defined. Cannot check owned land.');
+        return true;
+    }
+
+    const gridSize = landManager.gridSize;
+    const cellWidth = PLAY_AREA / gridSize;
+
+    const plotX = Math.floor((x - BORDER_WIDTH) / cellWidth);
+    const plotY = Math.floor((y - BORDER_WIDTH) / cellWidth);
+
+    return landManager.isLandOwned(plotX, plotY);
+}
+
 function updatePlayer() {
 	if (inputState.left) {
 		player.angle -= player.rotationSpeed;
@@ -46,8 +61,16 @@ function updatePlayer() {
 		player.speed *= 0.9;
 		if (abs(player.speed) < 0.02) player.speed = 0;
 	}
-	player.x += cos(player.angle) * player.speed;
-	player.y += sin(player.angle) * player.speed;
+
+	const nextX = player.x + cos(player.angle) * player.speed;
+	const nextY = player.y + sin(player.angle) * player.speed;
+
+	if (isPlayerOnOwnedLand(nextX, nextY)) {
+		player.x = nextX;
+		player.y = nextY;
+	} else {
+		player.speed = 0; // sthaapp step-tractor~ you dont own that land *yet*~
+	}
 
 	// constrains to board area
 	const minX = BORDER_WIDTH + 10;
