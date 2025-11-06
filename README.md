@@ -72,6 +72,6 @@ In this game, the user is a farmer, who got a small plot of land from their gran
         - Can ONLY buy land adjacent to the ones you own
         - Tractor can only move to the land user owns
         - Added planting function
-            - When 65% of the land is tilled (tillet??) then a box would pop up
+            - When 80% of the land is tilled (tillet??) then a box would pop up
             - Box basically tells them they gotta seed the ground (calm down buddy)
         
