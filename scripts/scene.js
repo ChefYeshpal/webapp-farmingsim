@@ -56,6 +56,7 @@ function draw() {
     // *seed the land*
     if (typeof cropManager !== 'undefined') {
         cropManager.drawSeeds();
+        cropManager.updateGrowth();
     }
     
     drawGrid();

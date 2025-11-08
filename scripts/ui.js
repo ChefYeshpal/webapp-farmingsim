@@ -12,6 +12,8 @@ class GameUI {
         this.dateDisplay = null;
         this.seasonDisplay = null;
         this.cropDisplay = null;
+        this.cropText = null;
+        this.cropProgressBar = null;
         this.landDisplay = null;
         this.yearProgress = null;
         this.progressIndicator = null;
@@ -29,6 +31,8 @@ class GameUI {
         this.dateDisplay = document.getElementById('date-display');
         this.seasonDisplay = document.getElementById('season-display');
         this.cropDisplay = document.getElementById('crop-display');
+        this.cropText = document.getElementById('crop-text');
+        this.cropProgressBar = document.getElementById('crop-progress-bar');
         this.landDisplay = document.getElementById('land-display');
         this.yearProgress = document.getElementById('year-progress');
         this.progressIndicator = document.getElementById('progress-indicator');
@@ -111,8 +115,8 @@ class GameUI {
             this.seasonDisplay.textContent = this.currentSeason;
         }
         
-        if (this.cropDisplay) {
-            this.cropDisplay.textContent = this.currentCrop;
+        if (this.cropText) {
+            this.cropText.textContent = this.currentCrop;
         }
         
         if (this.landDisplay) {
@@ -171,6 +175,12 @@ class GameUI {
     setCrop(cropName) {
         this.currentCrop = cropName;
         this.updateDisplay();
+    }
+    
+    setCropProgress(percentage) {
+        if (this.cropProgressBar) {
+            this.cropProgressBar.style.width = `${percentage}%`;
+        }
     }
     
     getGameState() {

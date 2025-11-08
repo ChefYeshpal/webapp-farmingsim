@@ -152,6 +152,30 @@ canvas {
     text-align: center;
 }
 
+.crop-value-container {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.crop-progress-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0%;
+    background-color: #8B7355;
+    transition: width 0.3s linear;
+    border-radius: 6px 0 0 6px;
+}
+
+.crop-text {
+    position: relative;
+    z-index: 1;
+}
+
 .time-controls {
     display: flex;
     justify-content: center;

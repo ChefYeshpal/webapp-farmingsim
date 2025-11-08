@@ -11,6 +11,20 @@ class CropManager {
         this.plantYesBtn = null;
         this.plantNoBtn = null;
         
+        // Growth system
+        this.growthStages = ['Seeds', 'Seedlings', 'Plantlings'];
+        this.currentStageIndex = -1;
+        this.growthProgress = 0;
+        this.growthDuration = 10000;
+        this.lastUpdateTime = 0;
+        this.isGrowing = false;
+        
+        this.stageImages = {
+            'Seeds': null,
+            'Seedlings': null,
+            'Plantlings': null
+        };
+        
         // Threshold for showing the planting dialog (0.8% of owned land tilled - lowered for easier testing)
         // This means tilled land should be about 0.8% of the land area (roughly 279 pixels for a single plot, yeah I wipped out the calculator for this)
         this.tillingThreshold = 0.8;
@@ -19,7 +33,10 @@ class CropManager {
     init() {
         this.createPlantingDialog();
         if (typeof loadImage === 'function') {
-            this.seedImage = loadImage('assets/seed.png');
+            this.stageImages['Seeds'] = loadImage('assets/seed.png');
+            this.stageImages['Seedlings'] = loadImage('assets/seedLINGS.png');
+            this.stageImages['Plantlings'] = loadImage('assets/plantlings.png');
+            this.seedImage = this.stageImages['Seeds'];
         }
         this.seedsLayer = createGraphics(PLAY_AREA, PLAY_AREA);
         this.seedsLayer.clear();
@@ -106,6 +123,7 @@ class CropManager {
         console.log('User confirmed planting');
         this.plantSeeds();
         this.hidePlantingDialog();
+        this.startGrowth();
     }
     
     cancelPlanting() {
@@ -175,15 +193,42 @@ class CropManager {
         }
         
         console.log('Planting seeds on all owned land...');
-        console.log('Seed image loaded:', this.seedImage && this.seedImage.width > 0);
+        console.log('Seed image loaded:', this.stageImages['Seeds'] && this.stageImages['Seeds'].width > 0);
         console.log('Owned land plots:', landManager.ownedLand.size);
+        
+        this.currentStageIndex = 0;
+        this.renderCurrentStage();
+        
+        this.seedsPlanted = true;
+        console.log(`Seeds planted successfully!`);
+        
+        if (typeof gameUI !== 'undefined') {
+            gameUI.setCrop('Seeds');
+        }
+    }
+    
+    renderCurrentStage() {
+        if (typeof landManager === 'undefined' || !this.seedsLayer) {
+            return;
+        }
         
         this.seedsLayer.clear();
         
         const gridSize = landManager.gridSize;
         const cellWidth = PLAY_AREA / gridSize;
         const seedSpacing = 20;
-        const seedSize = 12;
+        
+        // growth stages
+        const stageName = this.growthStages[this.currentStageIndex];
+        let seedSize = 12;
+        
+        if (stageName === 'Seedlings') {
+            seedSize = 18; 
+        } else if (stageName === 'Plantlings') {
+            seedSize = 24;
+        }
+        
+        const stageImage = this.stageImages[stageName];
         
         let seedCount = 0;
         
@@ -194,14 +239,13 @@ class CropManager {
             const startX = plotX * cellWidth;
             const startY = plotY * cellWidth;
             
-            console.log(`Planting on plot (${plotX}, ${plotY}) - startX: ${startX}, startY: ${startY}, cellWidth: ${cellWidth}`);
-            
             for (let x = startX + seedSpacing/2; x < startX + cellWidth; x += seedSpacing) {
                 for (let y = startY + seedSpacing/2; y < startY + cellWidth; y += seedSpacing) {
-                    if (this.seedImage && this.seedImage.width > 0) {
+                    if (stageImage && stageImage.width > 0) {
                         this.seedsLayer.push();
                         this.seedsLayer.imageMode(CENTER);
-                        this.seedsLayer.image(this.seedImage, x, y, seedSize, seedSize);
+                        this.seedsLayer.noSmooth();
+                        this.seedsLayer.image(stageImage, x, y, seedSize, seedSize);
                         this.seedsLayer.pop();
                     } else {
                         this.seedsLayer.push();
@@ -215,14 +259,68 @@ class CropManager {
             }
         });
         
-        this.seedsPlanted = true;
-        console.log(`Seeds planted successfully! Total seeds: ${seedCount}`);
-        console.log('Seeds layer dimensions:', this.seedsLayer.width, 'x', this.seedsLayer.height);
-        
-        // Update UI
-        if (typeof gameUI !== 'undefined') {
-            gameUI.setCrop('Seeds');
+        console.log(`Rendered ${stageName}: ${seedCount} plants`);
+    }
+    
+    startGrowth() {
+        this.isGrowing = true;
+        this.growthProgress = 0;
+        this.lastUpdateTime = millis();
+        console.log('Growth started!');
+    }
+    
+    updateGrowth() {
+        if (!this.isGrowing || this.currentStageIndex < 0) {
+            return;
         }
+        
+        if (typeof gameUI !== 'undefined' && gameUI.isGamePaused()) {
+            this.lastUpdateTime = millis();
+            return;
+        }
+        
+        const currentTime = millis();
+        const deltaTime = currentTime - this.lastUpdateTime;
+        this.lastUpdateTime = currentTime;
+    
+        const timeMultiplier = typeof gameUI !== 'undefined' ? gameUI.getTimeMultiplier() : 1;
+        this.growthProgress += deltaTime * timeMultiplier;
+        
+        // Calculate percentage for progress bar
+        const percentage = (this.growthProgress / this.growthDuration) * 100;
+        
+        if (typeof gameUI !== 'undefined') {
+            gameUI.setCropProgress(Math.min(percentage, 100));
+        }
+        
+        if (this.growthProgress >= this.growthDuration) {
+            this.advanceStage();
+        }
+    }
+    
+    advanceStage() {
+        this.currentStageIndex++;
+        
+        if (this.currentStageIndex >= this.growthStages.length) {
+            // All stages complete
+            console.log('🌾 All growth stages complete!');
+            this.isGrowing = false;
+            if (typeof gameUI !== 'undefined') {
+                gameUI.setCropProgress(100);
+            }
+            return;
+        }
+        
+        this.growthProgress = 0;
+        
+        const stageName = this.growthStages[this.currentStageIndex];
+        console.log(`🌱 Advanced to stage: ${stageName}`);
+        
+        if (typeof gameUI !== 'undefined') {
+            gameUI.setCrop(stageName);
+            gameUI.setCropProgress(0);
+        }
+        this.renderCurrentStage();
     }
     
     drawSeeds() {
@@ -274,8 +372,14 @@ class CropManager {
         this.tilledPixels.clear();
         this.seedsPlanted = false;
         this.plantingDialogShown = false;
+        this.isGrowing = false;
+        this.growthProgress = 0;
+        this.currentStageIndex = -1;
         if (this.seedsLayer) {
             this.seedsLayer.clear();
+        }
+        if (typeof gameUI !== 'undefined') {
+            gameUI.setCropProgress(0);
         }
         console.log('Crop system reset');
     }
@@ -327,4 +431,33 @@ window.forcePlant = function() {
     }
     
     cropManager.plantSeeds();
+    cropManager.startGrowth();
+};
+
+window.testGrowth = function() {
+    if (typeof cropManager === 'undefined') {
+        console.error('CropManager not initialized');
+        return;
+    }
+    
+    console.log('=== GROWTH TEST ===');
+    console.log('Current stage:', cropManager.growthStages[cropManager.currentStageIndex]);
+    console.log('Progress:', cropManager.growthProgress, '/', cropManager.growthDuration);
+    console.log('Is growing:', cropManager.isGrowing);
+    console.log('===================');
+};
+
+window.skipStage = function() {
+    if (typeof cropManager === 'undefined') {
+        console.error('CropManager not initialized');
+        return;
+    }
+    
+    if (!cropManager.isGrowing) {
+        console.log('Not currently growing');
+        return;
+    }
+    
+    cropManager.advanceStage();
+    console.log('Skipped to next stage!');
 };
