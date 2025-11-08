@@ -69,7 +69,7 @@ class LandPurchaseManager {
 
         // Handle dialog controls FIRST, this is cause for some reason them dialogue wouldn't show up
         if (this.isDialogOpen()) {
-            console.log('Purch: Dialog is open, handling dialog controls'); // note: remove later
+            console.log('Purch: Dialog is open, handling dialog controls'); // note: remove all these dumb comments later
             switch(e.key) {
                 case 'Enter':
                     e.preventDefault();
@@ -314,7 +314,7 @@ class LandPurchaseManager {
         strokeWeight(2);
         rect(x + 8, y + 8, cellWidth - 16, cellWidth - 16);
         
-        pop();
+        pop(); // I wanna eat popo-corno
     }
 }
 

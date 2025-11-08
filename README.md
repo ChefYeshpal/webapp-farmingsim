@@ -74,4 +74,9 @@ In this game, the user is a farmer, who got a small plot of land from their gran
         - Added planting function
             - When 80% of the land is tilled (tillet??) then a box would pop up
             - Box basically tells them they gotta seed the ground (calm down buddy)
+- 7 November 2025
+    - Tried to fix the out of land bounds issue, realised it's just a monitor problem
+        - Needed to till a bit outisde of owned land to be able to reach that 80% seed planting threshold
+        - Changed my monitor, and boom, somehow it's fixed
+        - I aint going back to it then
         
