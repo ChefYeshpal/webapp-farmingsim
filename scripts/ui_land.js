@@ -31,6 +31,7 @@ class LandPurchaseManager {
         this.landPriceDisplay = document.getElementById('land-price');
         this.yesBtn = document.getElementById('land-yes-btn');
         this.noBtn = document.getElementById('land-no-btn');
+        this.createPlantingWarningDialog();
         
         console.log('LandManager initialized:', {
             landDisplay: !!this.landDisplay,
@@ -52,6 +53,35 @@ class LandPurchaseManager {
         document.addEventListener('keydown', (e) => this.handleKeyPress(e));
     }
     
+    createPlantingWarningDialog() {
+        const dialogHTML = `
+            <div id="planting-warning-dialog" class="dialog-overlay" style="display: none;">
+                <div class="dialog-box">
+                    <h3>Warning!</h3>
+                    <p>If you buy this plot, you won't be able to plant anything until your next harvest.</p>
+                    <div class="dialog-buttons">
+                        <button id="warning-ok-btn" class="dialog-btn yes-btn">OK</button>
+                        <button id="warning-no-btn" class="dialog-btn no-btn">No</button>
+                    </div>
+                    <p class="dialog-hint">Press Enter to confirm, ESC to cancel</p>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', dialogHTML);
+        this.plantingWarningDialog = document.getElementById('planting-warning-dialog');
+        this.warningOkBtn = document.getElementById('warning-ok-btn');
+        this.warningNoBtn = document.getElementById('warning-no-btn');
+        
+        if (this.warningOkBtn) {
+            this.warningOkBtn.addEventListener('click', () => this.confirmWarning());
+        }
+        
+        if (this.warningNoBtn) {
+            this.warningNoBtn.addEventListener('click', () => this.cancelWarning());
+        }
+    }
+    
     toggleLandSelectionMode() {
         this.isLandSelectionMode = !this.isLandSelectionMode;
         
@@ -67,7 +97,25 @@ class LandPurchaseManager {
     handleKeyPress(e) {
         console.log('Purch: Key pressed:', e.key, 'Selection mode:', this.isLandSelectionMode, 'Dialog open:', this.isDialogOpen());
 
-        // Handle dialog controls FIRST, this is cause for some reason them dialogue wouldn't show up
+        // Handle warning dialog controls FIRST
+        if (this.isWarningDialogOpen()) {
+            console.log('Purch: Warning dialog is open, handling warning dialog controls');
+            switch(e.key) {
+                case 'Enter':
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.confirmWarning();
+                    return;
+                case 'Escape':
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.cancelWarning();
+                    return;
+            }
+            return;
+        }
+
+        // Handle dialog controls SECOND, this is cause for some reason them dialogue wouldn't show up
         if (this.isDialogOpen()) {
             console.log('Purch: Dialog is open, handling dialog controls'); // note: remove all these dumb comments later
             switch(e.key) {
@@ -234,7 +282,36 @@ class LandPurchaseManager {
         return isOpen;
     }
     
-    confirmPurchase() {
+    isWarningDialogOpen() {
+        return this.plantingWarningDialog && this.plantingWarningDialog.style.display === 'flex';
+    }
+    
+    showWarningDialog() {
+        if (this.plantingWarningDialog) {
+            this.plantingWarningDialog.style.display = 'flex';
+            console.log('Purchdialog: Warning dialog shown');
+        }
+    }
+    
+    hideWarningDialog() {
+        if (this.plantingWarningDialog) {
+            this.plantingWarningDialog.style.display = 'none';
+            console.log('Purchdialog: Warning dialog hidden');
+        }
+    }
+    
+    confirmWarning() {
+        console.log('Purchdialog: User confirmed purchase despite warning');
+        this.hideWarningDialog();
+        this.executePurchase();
+    }
+    
+    cancelWarning() {
+        console.log('Purchdialog: User cancelled purchase from warning');
+        this.hideWarningDialog();
+    }
+    
+    executePurchase() {
         const key = `${this.currentPlotX},${this.currentPlotY}`;
         this.ownedLand.add(key);
         if (typeof gameUI !== 'undefined') {
@@ -243,8 +320,21 @@ class LandPurchaseManager {
         
         console.log(`Purchdialog: Purchased land at (${this.currentPlotX}, ${this.currentPlotY})`);
         console.log(`Purchdialog: Total owned land: ${this.ownedLand.size}`);
-
+    }
+    
+    confirmPurchase() {
         this.hideDialog();
+        
+        // Check for seed planting
+        const hasPlantedSeeds = typeof cropManager !== 'undefined' && cropManager.seedsPlanted;
+        
+        if (hasPlantedSeeds) {
+            console.log('Purchdialog: Seeds are planted, showing warning dialog');
+            this.showWarningDialog();
+        } else {
+            console.log('Purchdialog: No seeds planted, proceeding with purchase');
+            this.executePurchase();
+        }
     }
     
     cancelPurchase() {
@@ -314,7 +404,7 @@ class LandPurchaseManager {
         strokeWeight(2);
         rect(x + 8, y + 8, cellWidth - 16, cellWidth - 16);
         
-        pop(); // I wanna eat popo-corno
+        pop(); // I wanna eat pop-corn
     }
 }
 
