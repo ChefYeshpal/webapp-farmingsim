@@ -1,0 +1,36 @@
+.wheat-field {
+    position: relative;
+}
+
+.wheat-stripe {
+    background: linear-gradient(
+        to bottom,
+        #F4E4C1 0%,
+        #DDA15E 20%,
+        #E8B878 40%,
+        #C99554 60%,
+        #DDA15E 100%
+    );
+}
+
+.wheat-grain {
+    background-color: #F4E4C1;
+    border-radius: 50%;
+}
+
+/* Animation for wheat swaying (future use) */
+@keyframes wheat-sway {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(2deg);
+    }
+    75% {
+        transform: rotate(-2deg);
+    }
+}
+
+.wheat-sway-animation {
+    animation: wheat-sway 3s ease-in-out infinite;
+}

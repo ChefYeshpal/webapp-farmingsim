@@ -12,17 +12,18 @@ class CropManager {
         this.plantNoBtn = null;
         
         // Growth system
-        this.growthStages = ['Seeds', 'Seedlings', 'Plantlings'];
+        this.growthStages = ['Seeds', 'Seedlings', 'Plantlings', 'Plantlings2', 'Wheat'];
         this.currentStageIndex = -1;
         this.growthProgress = 0;
-        this.growthDuration = 10000;
+        this.growthDuration = 10000; 
         this.lastUpdateTime = 0;
         this.isGrowing = false;
         
         this.stageImages = {
             'Seeds': null,
             'Seedlings': null,
-            'Plantlings': null
+            'Plantlings': null,
+            'Plantlings - 2': null
         };
         
         // Threshold for showing the planting dialog (0.8% of owned land tilled - lowered for easier testing)
@@ -36,10 +37,16 @@ class CropManager {
             this.stageImages['Seeds'] = loadImage('assets/seed.png');
             this.stageImages['Seedlings'] = loadImage('assets/seedLINGS.png');
             this.stageImages['Plantlings'] = loadImage('assets/plantlings.png');
+            this.stageImages['Plantlings2'] = loadImage('assets/plantlings.png');
             this.seedImage = this.stageImages['Seeds'];
         }
         this.seedsLayer = createGraphics(PLAY_AREA, PLAY_AREA);
         this.seedsLayer.clear();
+        
+        // Initialize wheat renderer
+        if (typeof wheatRenderer !== 'undefined') {
+            wheatRenderer.init();
+        }
         
         console.log('CropManager initialized');
     }
@@ -212,6 +219,17 @@ class CropManager {
             return;
         }
         
+        const stageName = this.growthStages[this.currentStageIndex];
+        
+        // Handle wheat stage separately
+        if (stageName === 'Wheat') {
+            this.seedsLayer.clear();
+            if (typeof wheatRenderer !== 'undefined') {
+                wheatRenderer.renderWheatOnPlots(landManager.ownedLand);
+            }
+            return;
+        }
+        
         this.seedsLayer.clear();
         
         const gridSize = landManager.gridSize;
@@ -219,12 +237,11 @@ class CropManager {
         const seedSpacing = 20;
         
         // growth stages
-        const stageName = this.growthStages[this.currentStageIndex];
         let seedSize = 12;
         
         if (stageName === 'Seedlings') {
             seedSize = 18; 
-        } else if (stageName === 'Plantlings') {
+        } else if (stageName === 'Plantlings' || stageName === 'Plantlings2') {
             seedSize = 24;
         }
         
@@ -269,6 +286,15 @@ class CropManager {
         console.log('Growth started!');
     }
     
+    getCurrentStageDuration() {
+        const stageName = this.growthStages[this.currentStageIndex];
+        // Plantlings2 -> Wheat takes 20 seconds instead of 10
+        if (stageName === 'Plantlings2') {
+            return 20000; // 20 seconds
+        }
+        return 10000; // 10 seconds for all other stages
+    }
+    
     updateGrowth() {
         if (!this.isGrowing || this.currentStageIndex < 0) {
             return;
@@ -286,14 +312,16 @@ class CropManager {
         const timeMultiplier = typeof gameUI !== 'undefined' ? gameUI.getTimeMultiplier() : 1;
         this.growthProgress += deltaTime * timeMultiplier;
         
+        const currentDuration = this.getCurrentStageDuration();
+        
         // Calculate percentage for progress bar
-        const percentage = (this.growthProgress / this.growthDuration) * 100;
+        const percentage = (this.growthProgress / currentDuration) * 100;
         
         if (typeof gameUI !== 'undefined') {
             gameUI.setCropProgress(Math.min(percentage, 100));
         }
         
-        if (this.growthProgress >= this.growthDuration) {
+        if (this.growthProgress >= currentDuration) {
             this.advanceStage();
         }
     }
@@ -329,6 +357,11 @@ class CropManager {
             imageMode(CORNER);
             image(this.seedsLayer, BORDER_WIDTH, BORDER_WIDTH);
             pop();
+        }
+        
+        const stageName = this.growthStages[this.currentStageIndex];
+        if (stageName === 'Wheat' && typeof wheatRenderer !== 'undefined') {
+            wheatRenderer.drawWheat();
         }
     }
     
