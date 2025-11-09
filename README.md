@@ -79,4 +79,7 @@ In this game, the user is a farmer, who got a small plot of land from their gran
         - Needed to till a bit outisde of owned land to be able to reach that 80% seed planting threshold
         - Changed my monitor, and boom, somehow it's fixed
         - I aint going back to it then
+        - Lol, didn't do much huh
+- 8 November 2025
+    - 
         

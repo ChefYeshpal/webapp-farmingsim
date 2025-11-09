@@ -343,8 +343,8 @@ class LandPurchaseManager {
     }
     
     calculateLandPrice(x, y) {
-        // For now, return a fixed price
-        // will be made more complex later
+        // so many zeros, I like zeros
+        // Land price should prolly become more expensive the farther it is from the og plot?
         return 1000;
     }
     
