@@ -28,7 +28,7 @@ class MarketSystem {
     createSellButton() {
         const buttonHTML = `
             <button id="sell-produce-btn" class="sell-button" style="display: none;">
-                💰 Sell Produce
+                Sell Produce
             </button>
         `;
         document.body.insertAdjacentHTML('beforeend', buttonHTML);
@@ -42,8 +42,8 @@ class MarketSystem {
     createSellDialog() {
         const dialogHTML = `
             <div id="sell-dialog" class="dialog-overlay" style="display: none;">
-                <div class="dialog-box sell-dialog-box">
-                    <h3>ell Your Produce</h3>
+                <div class="dialog-box">
+                    <h3>Sell Your Produce</h3>
                     <div class="sell-info">
                         <div class="sell-info-row">
                             <span class="sell-label">Amount:</span>

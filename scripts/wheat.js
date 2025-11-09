@@ -8,6 +8,11 @@ class WheatCropRenderer {
         this.pixelSize = 1;
         this.harvestedPixels = new Set();
         this._lastHarvested = { x: -9999, y: -9999 };
+        
+        // Cache for harvest stats to prevent lag cause browsers can be a bitch
+        this._cachedStats = null;
+        this._lastStatsCheck = 0;
+        this._statsCheckInterval = 500;
     }
     
     init() {
@@ -80,6 +85,8 @@ class WheatCropRenderer {
             this.wheatLayer.clear();
         }
         this.harvestedPixels.clear();
+        this._cachedStats = null;
+        this._lastStatsCheck = 0;
     }
     
     // Harvest wheat at a specific location (called when tractor moves over wheat)
@@ -113,49 +120,87 @@ class WheatCropRenderer {
             gameUI.addCropAmount(1);
         }
         
+        // Only check stats periodically to avoid lag
         if (typeof marketSystem !== 'undefined' && typeof landManager !== 'undefined') {
-            const stats = this.getHarvestStats();
-            marketSystem.updateHarvestProgress(stats.percentageHarvested);
+            const currentTime = millis();
+            if (currentTime - this._lastStatsCheck > this._statsCheckInterval) {
+                const stats = this.getHarvestStats(true);
+                marketSystem.updateHarvestProgress(stats.percentageHarvested);
+                this._lastStatsCheck = currentTime;
+            }
         }
     }
     
     isFullyHarvested(ownedLandSet) {
-        // Check if enough of the wheat has been harvested
         if (typeof landManager === 'undefined') return false;
         
-        const gridSize = landManager.gridSize;
-        const cellWidth = PLAY_AREA / gridSize;
-        const cellArea = cellWidth * cellWidth;
-        const totalOwnedArea = ownedLandSet.size * cellArea;
-        
-        const harvestedPixels = this.harvestedPixels.size;
-        const harvestedPercentage = (harvestedPixels / totalOwnedArea) * 100;
+        const stats = this.getHarvestStats();
         
         // Consider fully harvested when 80% is done
-        return harvestedPercentage >= 80;
+        return stats.percentageHarvested >= 80;
     }
     
-    getHarvestStats() {
-        if (typeof landManager === 'undefined') {
+    getHarvestStats(forceRefresh = false) {
+        // Return cached stats if available and not forcing refresh
+        if (!forceRefresh && this._cachedStats !== null) {
+            return this._cachedStats;
+        }
+        
+        if (typeof landManager === 'undefined' || !this.wheatLayer) {
             return {
-                harvestedPixels: 0,
-                percentageHarvested: 0
+                wheatPixelsRemaining: 0,
+                percentageHarvested: 0,
+                totalArea: 0
             };
         }
         
         const gridSize = landManager.gridSize;
         const cellWidth = PLAY_AREA / gridSize;
-        const cellArea = cellWidth * cellWidth;
-        const totalOwnedArea = landManager.ownedLand.size * cellArea;
         
-        const harvestedPixels = this.harvestedPixels.size;
-        const percentageHarvested = totalOwnedArea > 0 ? (harvestedPixels / totalOwnedArea) * 100 : 0;
+        let wheatPixelsRemaining = 0;
+        let totalPixelsChecked = 0;
         
-        return {
-            harvestedPixels,
+        // Increased sample rate for better performance (check every 4 pixels instead of 2)
+        const sampleRate = 4;
+        
+        this.wheatLayer.loadPixels();
+        const pixels = this.wheatLayer.pixels;
+        const layerWidth = this.wheatLayer.width;
+        
+        landManager.ownedLand.forEach(plotKey => {
+            const [plotX, plotY] = plotKey.split(',').map(Number);
+            
+            const startX = Math.floor(plotX * cellWidth);
+            const startY = Math.floor(plotY * cellWidth);
+            const endX = Math.floor(startX + cellWidth);
+            const endY = Math.floor(startY + cellWidth);
+            
+            for (let x = startX; x < endX; x += sampleRate) {
+                for (let y = startY; y < endY; y += sampleRate) {
+                    totalPixelsChecked++;
+                    // Calculate pixel index in the pixels array
+                    const index = (y * layerWidth + x) * 4;
+                    // Check alpha channel (index + 3)
+                    if (pixels[index + 3] > 0) {
+                        wheatPixelsRemaining++;
+                    }
+                }
+            }
+        });
+        
+        const percentageHarvested = totalPixelsChecked > 0 
+            ? ((totalPixelsChecked - wheatPixelsRemaining) / totalPixelsChecked) * 100 
+            : 0;
+        
+        const stats = {
+            wheatPixelsRemaining,
             percentageHarvested,
-            totalArea: totalOwnedArea
+            totalArea: totalPixelsChecked
         };
+        
+        this._cachedStats = stats;
+        
+        return stats;
     }
     
     testWheatRender(plotX = 0, plotY = 0, cellWidth = 100) {
@@ -183,8 +228,8 @@ window.getHarvestStatus = function() {
     
     const stats = wheatRenderer.getHarvestStats();
     console.log('=== HARVEST STATUS ===');
-    console.log(`Harvested Pixels: ${stats.harvestedPixels}`);
-    console.log(`Total Area: ${Math.round(stats.totalArea)} pixels`);
+    console.log(`Wheat Pixels Remaining: ${stats.wheatPixelsRemaining}`);
+    console.log(`Total Area Checked: ${stats.totalArea} pixels`);
     console.log(`Percentage Harvested: ${stats.percentageHarvested.toFixed(2)}%`);
     console.log(`Crop Amount: ${typeof gameUI !== 'undefined' ? gameUI.getCropAmount() : 'N/A'}`);
     console.log('======================');

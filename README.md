@@ -81,5 +81,9 @@ In this game, the user is a farmer, who got a small plot of land from their gran
         - I aint going back to it then
         - Lol, didn't do much huh
 - 8 November 2025
-    - 
+    - I forgor
+- 9 November 2025
+    - Added wheat harvesting system
+    - Trying to add wheat selling system
+    -
         
