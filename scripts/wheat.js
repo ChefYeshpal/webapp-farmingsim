@@ -6,6 +6,8 @@ class WheatCropRenderer {
         this.lightStripeColors = ['#E8C9A0', '#D4B896', '#C4A882'];
         
         this.pixelSize = 1;
+        this.harvestedPixels = new Set(); // Track harvested areas
+        this._lastHarvested = { x: -9999, y: -9999 }; // Track last harvest position
     }
     
     init() {
@@ -79,6 +81,79 @@ class WheatCropRenderer {
         if (this.wheatLayer) {
             this.wheatLayer.clear();
         }
+        this.harvestedPixels.clear();
+    }
+    
+    // Harvest wheat at a specific location (called when tractor moves over wheat)
+    harvestAt(localX, localY) {
+        if (!this.wheatLayer) return;
+        
+        // Check distance from last harvest to avoid over-harvesting
+        const dx = localX - this._lastHarvested.x;
+        const dy = localY - this._lastHarvested.y;
+        const distSq = dx * dx + dy * dy;
+        const minDist = 6;
+        if (distSq < minDist * minDist) return;
+        
+        const w = 48;
+        const h = 56;
+        
+        this.wheatLayer.push();
+        this.wheatLayer.erase();
+        this.wheatLayer.ellipse(localX, localY, w, h);
+        this.wheatLayer.noErase();
+        this.wheatLayer.pop();
+        
+        // Record harvested area
+        const key = `${Math.round(localX)},${Math.round(localY)}`;
+        this.harvestedPixels.add(key);
+        
+        this._lastHarvested.x = localX;
+        this._lastHarvested.y = localY;
+        
+        // Add to crop amount (small increment per harvest action)
+        if (typeof gameUI !== 'undefined') {
+            gameUI.addCropAmount(1);
+        }
+    }
+    
+    isFullyHarvested(ownedLandSet) {
+        // Check if enough of the wheat has been harvested
+        if (typeof landManager === 'undefined') return false;
+        
+        const gridSize = landManager.gridSize;
+        const cellWidth = PLAY_AREA / gridSize;
+        const cellArea = cellWidth * cellWidth;
+        const totalOwnedArea = ownedLandSet.size * cellArea;
+        
+        const harvestedPixels = this.harvestedPixels.size;
+        const harvestedPercentage = (harvestedPixels / totalOwnedArea) * 100;
+        
+        // Consider fully harvested when 80% is done
+        return harvestedPercentage >= 80;
+    }
+    
+    getHarvestStats() {
+        if (typeof landManager === 'undefined') {
+            return {
+                harvestedPixels: 0,
+                percentageHarvested: 0
+            };
+        }
+        
+        const gridSize = landManager.gridSize;
+        const cellWidth = PLAY_AREA / gridSize;
+        const cellArea = cellWidth * cellWidth;
+        const totalOwnedArea = landManager.ownedLand.size * cellArea;
+        
+        const harvestedPixels = this.harvestedPixels.size;
+        const percentageHarvested = totalOwnedArea > 0 ? (harvestedPixels / totalOwnedArea) * 100 : 0;
+        
+        return {
+            harvestedPixels,
+            percentageHarvested,
+            totalArea: totalOwnedArea
+        };
     }
     
     testWheatRender(plotX = 0, plotY = 0, cellWidth = 100) {
@@ -98,4 +173,22 @@ class WheatCropRenderer {
 const wheatRenderer = new WheatCropRenderer();
 window.testWheat = function(plotX = 0, plotY = 0, cellWidth = 100) {
     wheatRenderer.testWheatRender(plotX, plotY, cellWidth);
+};
+
+// Test harvest stats
+window.getHarvestStatus = function() {
+    if (typeof wheatRenderer === 'undefined') {
+        console.error('Wheat renderer not initialized');
+        return;
+    }
+    
+    const stats = wheatRenderer.getHarvestStats();
+    console.log('=== HARVEST STATUS ===');
+    console.log(`Harvested Pixels: ${stats.harvestedPixels}`);
+    console.log(`Total Area: ${Math.round(stats.totalArea)} pixels`);
+    console.log(`Percentage Harvested: ${stats.percentageHarvested.toFixed(2)}%`);
+    console.log(`Crop Amount: ${typeof gameUI !== 'undefined' ? gameUI.getCropAmount() : 'N/A'}`);
+    console.log('======================');
+    
+    return stats;
 };

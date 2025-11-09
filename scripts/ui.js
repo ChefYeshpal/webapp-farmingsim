@@ -6,6 +6,7 @@ class GameUI {
         this.currentSeason = 'Spring';
         this.currentYear = 1;
         this.currentCrop = 'None';
+        this.cropAmount = 0;
         this.seasons = ['Spring', 'Summer', 'Fall', 'Winter'];
         this.daysPerSeason = 28;
         this.daysPerYear = this.daysPerSeason * 4;
@@ -112,7 +113,7 @@ class GameUI {
         }
         
         if (this.seasonDisplay) {
-            this.seasonDisplay.textContent = this.currentSeason;
+            this.seasonDisplay.textContent = this.cropAmount;
         }
         
         if (this.cropText) {
@@ -183,13 +184,23 @@ class GameUI {
         }
     }
     
+    addCropAmount(amount) {
+        this.cropAmount += amount;
+        this.updateDisplay();
+    }
+    
+    getCropAmount() {
+        return this.cropAmount;
+    }
+    
     getGameState() {
         return {
             day: this.currentDay,
             season: this.currentSeason,
             year: this.currentYear,
             ownedLand: this.ownedLandCount,
-            crop: this.currentCrop
+            crop: this.currentCrop,
+            cropAmount: this.cropAmount
         };
     }
 }

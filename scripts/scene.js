@@ -113,9 +113,20 @@ function maybeEraseCover(canvasX, canvasY, playerState) {
     const localX = canvasX - BORDER_WIDTH;
     const localY = canvasY - BORDER_WIDTH;
 
-    eraseCoverAt(localX, localY, playerState);
+    if (typeof cropManager !== 'undefined' && cropManager.isHarvestable) {
+        harvestWheatAt(localX, localY);
+    } else {
+        eraseCoverAt(localX, localY, playerState);
+    }
+    
     _lastTilled.x = canvasX;
     _lastTilled.y = canvasY;
+}
+
+function harvestWheatAt(localX, localY) {
+    if (typeof wheatRenderer !== 'undefined') {
+        wheatRenderer.harvestAt(localX, localY);
+    }
 }
 
 function eraseCoverAt(localX, localY, playerState) {

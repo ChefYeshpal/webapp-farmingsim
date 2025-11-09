@@ -15,15 +15,16 @@ class CropManager {
         this.growthStages = ['Seeds', 'Seedlings', 'Plantlings', 'Plantlings2', 'Wheat'];
         this.currentStageIndex = -1;
         this.growthProgress = 0;
-        this.growthDuration = 10000; 
+        this.growthDuration = 10000;
         this.lastUpdateTime = 0;
         this.isGrowing = false;
+        this.isHarvestable = false;
         
         this.stageImages = {
             'Seeds': null,
             'Seedlings': null,
             'Plantlings': null,
-            'Plantlings - 2': null
+            'Plantlings2': null
         };
         
         // Threshold for showing the planting dialog (0.8% of owned land tilled - lowered for easier testing)
@@ -342,11 +343,23 @@ class CropManager {
         this.growthProgress = 0;
         
         const stageName = this.growthStages[this.currentStageIndex];
-        console.log(`🌱 Advanced to stage: ${stageName}`);
+        console.log(`Advanced to stage: ${stageName}`);
+        
+        if (stageName === 'Wheat') {
+            this.isGrowing = false;
+            this.isHarvestable = true;
+            console.log('Wheat harvest is on bby');
+            if (typeof gameUI !== 'undefined') {
+                gameUI.setCropProgress(0);
+            }
+        } else {
+            if (typeof gameUI !== 'undefined') {
+                gameUI.setCropProgress(0);
+            }
+        }
         
         if (typeof gameUI !== 'undefined') {
             gameUI.setCrop(stageName);
-            gameUI.setCropProgress(0);
         }
         this.renderCurrentStage();
     }
@@ -406,6 +419,7 @@ class CropManager {
         this.seedsPlanted = false;
         this.plantingDialogShown = false;
         this.isGrowing = false;
+        this.isHarvestable = false;
         this.growthProgress = 0;
         this.currentStageIndex = -1;
         if (this.seedsLayer) {
@@ -413,6 +427,9 @@ class CropManager {
         }
         if (typeof gameUI !== 'undefined') {
             gameUI.setCropProgress(0);
+        }
+        if (typeof wheatRenderer !== 'undefined') {
+            wheatRenderer.clearWheat();
         }
         console.log('Crop system reset');
     }
@@ -475,8 +492,9 @@ window.testGrowth = function() {
     
     console.log('=== GROWTH TEST ===');
     console.log('Current stage:', cropManager.growthStages[cropManager.currentStageIndex]);
-    console.log('Progress:', cropManager.growthProgress, '/', cropManager.growthDuration);
+    console.log('Progress:', cropManager.growthProgress, '/', cropManager.getCurrentStageDuration());
     console.log('Is growing:', cropManager.isGrowing);
+    console.log('Is harvestable:', cropManager.isHarvestable);
     console.log('===================');
 };
 
@@ -486,11 +504,25 @@ window.skipStage = function() {
         return;
     }
     
-    if (!cropManager.isGrowing) {
-        console.log('Not currently growing');
+    if (!cropManager.isGrowing && !cropManager.isHarvestable) {
+        console.log('Not currently growing or harvestable');
         return;
     }
     
     cropManager.advanceStage();
     console.log('Skipped to next stage!');
+};
+
+// Quick function to reach wheat stage for testing
+window.skipToWheat = function() {
+    if (typeof cropManager === 'undefined') {
+        console.error('CropManager not initialized');
+        return;
+    }
+    
+    // Skip all stages until wheat
+    while (cropManager.currentStageIndex < cropManager.growthStages.length - 1) {
+        cropManager.advanceStage();
+    }
+    console.log('🌾 Skipped to Wheat stage! Ready to harvest!');
 };
