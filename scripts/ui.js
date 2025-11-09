@@ -135,7 +135,7 @@ class GameUI {
             this.yearProgress.style.width = `${progress}%`;
         }
         
-        if (this.progressIndicator) {
+        if (this.progressIndicator && this.currentCrop === 'None') {
             this.progressIndicator.style.left = `${progress}%`;
         }
     }
@@ -181,6 +181,11 @@ class GameUI {
     setCropProgress(percentage) {
         if (this.cropProgressBar) {
             this.cropProgressBar.style.width = `${percentage}%`;
+        }
+        
+        // Update the progress indicator position based on crop progress
+        if (this.progressIndicator) {
+            this.progressIndicator.style.left = `${percentage}%`;
         }
     }
     

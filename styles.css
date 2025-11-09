@@ -120,6 +120,11 @@ canvas {
     transition: width 0.3s ease;
 }
 
+.crop-progress-fill {
+    background-color: #4a7c59;
+    z-index: 1;
+}
+
 .progress-indicator {
     position: absolute;
     width: 16px;
@@ -128,8 +133,9 @@ canvas {
     background-color: #654321;
     border: 3px solid #8B4513;
     border-radius: 50%;
-    transition: left 0.3s ease;
+    transition: left 0.3s linear;
     transform: translateX(-50%);
+    z-index: 2;
 }
 
 .info-label {
@@ -150,25 +156,6 @@ canvas {
     border: 2px solid #bc6c25;
     border-radius: 8px;
     text-align: center;
-}
-
-.crop-value-container {
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.crop-progress-bar {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 0%;
-    background-color: #8B7355;
-    transition: width 0.3s linear;
-    border-radius: 6px 0 0 6px;
 }
 
 .crop-text {
