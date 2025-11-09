@@ -314,3 +314,18 @@
 .price-input[type=number] {
     -moz-appearance: textfield;
 }
+
+.money-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #654321;
+    z-index: 100;
+    letter-spacing: 0.5px;
+}
+
+#money-amount {
+    color: #4a7c59;
+}

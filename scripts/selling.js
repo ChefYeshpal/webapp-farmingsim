@@ -17,12 +17,31 @@ class MarketSystem {
         this.priceElasticity = 0.8;
         
         this.isReadyToSell = false;
-        this.money = 1000; 
+        this.money = 0;
+        this.moneyDisplay = null;
     }
     
     init() {
+        this.createMoneyDisplay();
         this.createSellButton();
         this.createSellDialog();
+        this.updateMoneyDisplay();
+    }
+    
+    createMoneyDisplay() {
+        const moneyHTML = `
+            <div id="money-display" class="money-indicator">
+                 $<span id="money-amount">0</span>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', moneyHTML);
+        this.moneyDisplay = document.getElementById('money-amount');
+    }
+    
+    updateMoneyDisplay() {
+        if (this.moneyDisplay) {
+            this.moneyDisplay.textContent = this.money.toFixed(2);
+        }
     }
     
     createSellButton() {
@@ -63,7 +82,7 @@ class MarketSystem {
                                    min="1" max="100" value="${this.basePrice}" step="0.5">
                             <span class="price-unit">/unit</span>
                         </div>
-                        <p class="price-hint">💡 Higher prices = Lower sales volume</p>
+                        <p class="price-hint">Higher prices = Lower sales volume</p>
                     </div>
                     
                     <div class="market-forecast">
@@ -221,6 +240,7 @@ class MarketSystem {
         const revenue = salesVolume * pricePerUnit;
         
         this.money += revenue;
+        this.updateMoneyDisplay();
         
         if (typeof gameUI !== 'undefined') {
             console.log(`💰 Sold ${salesVolume} units for $${revenue.toFixed(2)}!`);
