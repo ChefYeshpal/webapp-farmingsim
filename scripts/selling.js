@@ -251,11 +251,17 @@ class MarketSystem {
         this.hideSellButton();
         this.hideSellDialog();
         if (typeof cropManager !== 'undefined') {
-            cropManager.isHarvestable = false;
-            cropManager.seedsPlanted = false;
-            cropManager.plantingDialogShown = false;
-            cropManager.currentStageIndex = -1;
-            
+            // Reset the full crop state (clears tilled pixels, growth state, and seed layers)
+            if (typeof cropManager.reset === 'function') {
+                cropManager.reset();
+            } else {
+                // Fallback: clear the important flags if reset() is not available
+                cropManager.isHarvestable = false;
+                cropManager.seedsPlanted = false;
+                cropManager.plantingDialogShown = false;
+                cropManager.currentStageIndex = -1;
+            }
+
             if (typeof gameUI !== 'undefined') {
                 gameUI.setCrop('None');
                 gameUI.setCropProgress(0);

@@ -312,7 +312,7 @@
 }
 
 .price-input[type=number] {
-    -moz-appearance: textfield;
+    --moz-appearance: textfield;
 }
 
 .money-indicator {
