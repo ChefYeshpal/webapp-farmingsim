@@ -107,6 +107,20 @@ function maybeEraseCover(canvasX, canvasY, playerState) {
 
     if (typeof cropManager !== 'undefined' && cropManager.isHarvestable) {
         harvestWheatAt(localX, localY);
+        
+        // ALSO check if there's untilled land and till it simultaneously
+        const pixel = coverLayer.get(localX + BORDER_WIDTH, localY + BORDER_WIDTH);
+        if (pixel[3] > 0) {
+            const dx = canvasX - _lastTilled.x;
+            const dy = canvasY - _lastTilled.y;
+            const distSq = dx * dx + dy * dy;
+            const minDist = 6; 
+            if (distSq >= minDist * minDist) {
+                eraseCoverAt(localX, localY, playerState);
+                _lastTilled.x = canvasX;
+                _lastTilled.y = canvasY;
+            }
+        }
     } else {
         const dx = canvasX - _lastTilled.x;
         const dy = canvasY - _lastTilled.y;
