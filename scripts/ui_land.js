@@ -117,7 +117,6 @@ class LandPurchaseManager {
 
         // Handle dialog controls SECOND, this is cause for some reason them dialogue wouldn't show up
         if (this.isDialogOpen()) {
-            console.log('Purch: Dialog is open, handling dialog controls'); // note: remove all these dumb comments later
             switch(e.key) {
                 case 'Enter':
                     e.preventDefault();
@@ -165,7 +164,6 @@ class LandPurchaseManager {
                 case 'Enter':
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('Purch: Enter pressed: trying to purchase land');
                     this.tryPurchaseLand();
                     break;
                 case 'Escape':
@@ -186,9 +184,7 @@ class LandPurchaseManager {
                 this.currentPlotX = newX;
                 this.currentPlotY = newY;
                 this.raisedTarget = 8;
-                console.log(`Purch: Selected plot: (${this.currentPlotX}, ${this.currentPlotY})`);
             } else {
-                console.log('Purch: Cannot reach that land');
                 this.triggerRedFlash();
             }
         }
@@ -202,17 +198,11 @@ class LandPurchaseManager {
     tryPurchaseLand() {
         const key = `${this.currentPlotX},${this.currentPlotY}`;
         
-        console.log('Purch: Attempting to purchase land at:', this.currentPlotX, this.currentPlotY);
-        console.log('Purch: Is owned:', this.ownedLand.has(key));
-        console.log('Purch: Is adjacent:', this.isAdjacentToOwnedLand(this.currentPlotX, this.currentPlotY));
-        
         if (this.ownedLand.has(key)) {
-            console.log('Purch: Already owned land');
             return;
         }
         
         if (!this.isAdjacentToOwnedLand(this.currentPlotX, this.currentPlotY)) {
-            console.log('Purch: Land not adjacent to owned');
             return;
         }
         
@@ -238,17 +228,12 @@ class LandPurchaseManager {
     }
     
     showPurchaseDialog() {
-        console.log('=== showPurchaseDialog called ===');
         if (!this.dialogOverlay) {
-            console.log('Purchdialog: Dialog overlay was null, trying to find it again');
             this.dialogOverlay = document.getElementById('land-purchase-dialog');
         }
         if (!this.landPriceDisplay) {
             this.landPriceDisplay = document.getElementById('land-price');
         }
-        
-        console.log('Purchdialog: Dialog overlay element:', this.dialogOverlay);
-        console.log('Purchdialog: Current display style:', this.dialogOverlay ? this.dialogOverlay.style.display : 'null');
         
         const price = this.calculateLandPrice(this.currentPlotX, this.currentPlotY);
         
@@ -258,8 +243,6 @@ class LandPurchaseManager {
         
         if (this.dialogOverlay) {
             this.dialogOverlay.style.display = 'flex';
-            console.log('Purchdialog: Dialog display set to flex');
-            console.log('Dialog is now open:', this.isDialogOpen());
             
             // Force a reflow to ensure the style is applied
             this.dialogOverlay.offsetHeight;
@@ -269,10 +252,8 @@ class LandPurchaseManager {
     }
     
     hideDialog() {
-        console.log('=== hideDialog called ===');
         if (this.dialogOverlay) {
             this.dialogOverlay.style.display = 'none';
-            console.log('Purchdialog: Dialog hidden');
         }
     }
     
@@ -289,25 +270,21 @@ class LandPurchaseManager {
     showWarningDialog() {
         if (this.plantingWarningDialog) {
             this.plantingWarningDialog.style.display = 'flex';
-            console.log('Purchdialog: Warning dialog shown');
         }
     }
     
     hideWarningDialog() {
         if (this.plantingWarningDialog) {
             this.plantingWarningDialog.style.display = 'none';
-            console.log('Purchdialog: Warning dialog hidden');
         }
     }
     
     confirmWarning() {
-        console.log('Purchdialog: User confirmed purchase despite warning');
         this.hideWarningDialog();
         this.executePurchase();
     }
     
     cancelWarning() {
-        console.log('Purchdialog: User cancelled purchase from warning');
         this.hideWarningDialog();
     }
     
@@ -317,9 +294,6 @@ class LandPurchaseManager {
         if (typeof gameUI !== 'undefined') {
             gameUI.addLand();
         }
-        
-        console.log(`Purchdialog: Purchased land at (${this.currentPlotX}, ${this.currentPlotY})`);
-        console.log(`Purchdialog: Total owned land: ${this.ownedLand.size}`);
     }
     
     confirmPurchase() {
@@ -329,16 +303,13 @@ class LandPurchaseManager {
         const hasPlantedSeeds = typeof cropManager !== 'undefined' && cropManager.seedsPlanted;
         
         if (hasPlantedSeeds) {
-            console.log('Purchdialog: Seeds are planted, showing warning dialog');
             this.showWarningDialog();
         } else {
-            console.log('Purchdialog: No seeds planted, proceeding with purchase');
             this.executePurchase();
         }
     }
     
     cancelPurchase() {
-        console.log('Purchdialog: Purchase cancelled.');
         this.hideDialog();
     }
     
@@ -404,7 +375,7 @@ class LandPurchaseManager {
         strokeWeight(2);
         rect(x + 8, y + 8, cellWidth - 16, cellWidth - 16);
         
-        pop(); // I wanna eat pop-corn
+        pop();
     }
 }
 
@@ -414,12 +385,10 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             landManager.init();
-            console.log('Land manager initialized after DOM loaded');
         }, 100);
     });
 } else {
     setTimeout(() => {
         landManager.init();
-        console.log('Land manager initialized (DOM already ready)');
     }, 100);
 }

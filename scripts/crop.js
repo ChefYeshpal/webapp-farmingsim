@@ -48,8 +48,6 @@ class CropManager {
         if (typeof wheatRenderer !== 'undefined') {
             wheatRenderer.init();
         }
-        
-        console.log('CropManager initialized');
     }
     
     createPlantingDialog() {
@@ -116,26 +114,22 @@ class CropManager {
     showPlantingDialog() {
         if (this.plantingDialog) {
             this.plantingDialog.style.display = 'flex';
-            console.log('Planting dialog shown');
         }
     }
     
     hidePlantingDialog() {
         if (this.plantingDialog) {
             this.plantingDialog.style.display = 'none';
-            console.log('Planting dialog hidden');
         }
     }
     
     confirmPlanting() {
-        console.log('User confirmed planting');
         this.plantSeeds();
         this.hidePlantingDialog();
         this.startGrowth();
     }
     
     cancelPlanting() {
-        console.log('User canceled planting');
         this.hidePlantingDialog();
         this.plantingDialogShown = false;
     }
@@ -152,13 +146,10 @@ class CropManager {
         
         const stats = this.getTillingStats();
         
-        console.log(`Tilling check: ${stats.percentageTilled.toFixed(2)}% (threshold: ${this.tillingThreshold}%)`);
-        
         // Show dialog when threshold percentage of owned land is tilled
         // percentageTilled is already in percentage form (0-100), so compare directly against threshold
         if (stats.percentageTilled >= this.tillingThreshold) {
             this.plantingDialogShown = true;
-            console.log('🌱 Threshold reached! Showing planting dialog');
             this.showPlantingDialog();
         }
     }
@@ -200,15 +191,10 @@ class CropManager {
             return;
         }
         
-        console.log('Planting seeds on all owned land...');
-        console.log('Seed image loaded:', this.stageImages['Seeds'] && this.stageImages['Seeds'].width > 0);
-        console.log('Owned land plots:', landManager.ownedLand.size);
-        
         this.currentStageIndex = 0;
         this.renderCurrentStage();
         
         this.seedsPlanted = true;
-        console.log(`Seeds planted successfully!`);
         
         if (typeof gameUI !== 'undefined') {
             gameUI.setCrop('Seeds');
@@ -276,15 +262,12 @@ class CropManager {
                 }
             }
         });
-        
-        console.log(`Rendered ${stageName}: ${seedCount} plants`);
     }
     
     startGrowth() {
         this.isGrowing = true;
         this.growthProgress = 0;
         this.lastUpdateTime = millis();
-        console.log('Growth started!');
     }
     
     getCurrentStageDuration() {
@@ -332,7 +315,6 @@ class CropManager {
         
         if (this.currentStageIndex >= this.growthStages.length) {
             // All stages complete
-            console.log('🌾 All growth stages complete!');
             this.isGrowing = false;
             if (typeof gameUI !== 'undefined') {
                 gameUI.setCropProgress(100);
@@ -343,12 +325,10 @@ class CropManager {
         this.growthProgress = 0;
         
         const stageName = this.growthStages[this.currentStageIndex];
-        console.log(`Advanced to stage: ${stageName}`);
         
         if (stageName === 'Wheat') {
             this.isGrowing = false;
             this.isHarvestable = true;
-            console.log('Wheat harvest is on bby');
             if (typeof gameUI !== 'undefined') {
                 gameUI.setCropProgress(0);
             }
@@ -385,8 +365,6 @@ class CropManager {
             return;
         }
         
-        console.log('AUTO-TILLING all owned land for testing...');
-        
         const gridSize = landManager.gridSize;
         const cellWidth = PLAY_AREA / gridSize;
         
@@ -405,9 +383,6 @@ class CropManager {
                 }
             }
         });
-        
-        const stats = this.getTillingStats();
-        console.log(`Auto-tilled ${stats.tilledPixels} pixels (${stats.percentageTilled.toFixed(2)}%)`);
         
         this.plantingDialogShown = false;
         this.seedsPlanted = false;
@@ -431,17 +406,11 @@ class CropManager {
         if (typeof wheatRenderer !== 'undefined') {
             wheatRenderer.clearWheat();
         }
-        console.log('Crop system reset');
     }
 }
 
 // Create global instance
 const cropManager = new CropManager();
-
-// Initialize when p5.js is ready
-if (typeof setup !== 'undefined') {
-    console.log('CropManager will be initialized in setup()');
-}
 window.getTillingStatus = function() {
     if (typeof cropManager === 'undefined') {
         console.error('CropManager not initialized');
@@ -449,8 +418,6 @@ window.getTillingStatus = function() {
     }
     
     const stats = cropManager.getTillingStats();
-    // WHY DO I LIKE CONSOLE LOGS SO MUCH?!?!?!?!??!?!
-    // Its cause then i'll know where i eff up, i aint a god
     console.log('=== TILLING STATUS ===');
     console.log(`Owned Land Plots: ${stats.ownedLandCount}`);
     console.log(`Owned Land Area: ${Math.round(stats.ownedLandArea)} pixels`);
@@ -505,12 +472,10 @@ window.skipStage = function() {
     }
     
     if (!cropManager.isGrowing && !cropManager.isHarvestable) {
-        console.log('Not currently growing or harvestable');
         return;
     }
     
     cropManager.advanceStage();
-    console.log('Skipped to next stage!');
 };
 
 // Quick function to reach wheat stage for testing
@@ -524,5 +489,4 @@ window.skipToWheat = function() {
     while (cropManager.currentStageIndex < cropManager.growthStages.length - 1) {
         cropManager.advanceStage();
     }
-    console.log('🌾 Skipped to Wheat stage! Ready to harvest!');
 };

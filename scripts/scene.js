@@ -42,12 +42,10 @@ function setup() {
     coverLayer.fill(COLORS.wheat);
     coverLayer.rect(0, 0, PLAY_AREA, PLAY_AREA);
     
-    // Initialize wheat renderer
     if (typeof wheatRenderer !== 'undefined') {
         wheatRenderer.init();
     }
     
-    // Initialize crop manager
     if (typeof cropManager !== 'undefined') {
         cropManager.init();
     }

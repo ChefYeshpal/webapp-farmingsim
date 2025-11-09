@@ -37,8 +37,6 @@ class WheatCropRenderer {
             
             this.drawWheatInPlot(startX, startY, cellWidth);
         });
-        
-        console.log('🌾 Wheat rendered on all owned plots');
     }
     
     drawWheatInPlot(startX, startY, cellWidth) {
@@ -157,9 +155,6 @@ class WheatCropRenderer {
     }
     
     testWheatRender(plotX = 0, plotY = 0, cellWidth = 100) {
-        console.log('🌾 Testing wheat render...');
-        console.log(`Plot: (${plotX}, ${plotY}), Cell Width: ${cellWidth}px`);
-        
         if (this.wheatLayer) {
             this.wheatLayer.clear();
             this.drawWheatInPlot(plotX, plotY, cellWidth);
