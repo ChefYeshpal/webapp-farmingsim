@@ -102,23 +102,23 @@ function maybeEraseCover(canvasX, canvasY, playerState) {
     if (canvasX < BORDER_WIDTH || canvasX > CANVAS_SIZE - BORDER_WIDTH) return;
     if (canvasY < BORDER_WIDTH || canvasY > CANVAS_SIZE - BORDER_WIDTH) return;
 
-    const dx = canvasX - _lastTilled.x;
-    const dy = canvasY - _lastTilled.y;
-    const distSq = dx * dx + dy * dy;
-    const minDist = 6; 
-    if (distSq < minDist * minDist) return;
-
     const localX = canvasX - BORDER_WIDTH;
     const localY = canvasY - BORDER_WIDTH;
 
     if (typeof cropManager !== 'undefined' && cropManager.isHarvestable) {
         harvestWheatAt(localX, localY);
     } else {
+        const dx = canvasX - _lastTilled.x;
+        const dy = canvasY - _lastTilled.y;
+        const distSq = dx * dx + dy * dy;
+        const minDist = 6; 
+        if (distSq < minDist * minDist) return;
+
         eraseCoverAt(localX, localY, playerState);
+        
+        _lastTilled.x = canvasX;
+        _lastTilled.y = canvasY;
     }
-    
-    _lastTilled.x = canvasX;
-    _lastTilled.y = canvasY;
 }
 
 function harvestWheatAt(localX, localY) {

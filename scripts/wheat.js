@@ -8,6 +8,7 @@ class WheatCropRenderer {
         this.pixelSize = 1;
         this.harvestedPixels = new Set(); // Track harvested areas
         this._lastHarvested = { x: -9999, y: -9999 }; // Track last harvest position
+        this.harvestCounter = 0; // Counter for crop amount increments
     }
     
     init() {
@@ -80,18 +81,11 @@ class WheatCropRenderer {
             this.wheatLayer.clear();
         }
         this.harvestedPixels.clear();
+        this.harvestCounter = 0;
+        this._lastHarvested = { x: -9999, y: -9999 };
     }
-    
-    // Harvest wheat at a specific location (called when tractor moves over wheat)
     harvestAt(localX, localY) {
         if (!this.wheatLayer) return;
-        
-        // Check distance from last harvest to avoid over-harvesting
-        const dx = localX - this._lastHarvested.x;
-        const dy = localY - this._lastHarvested.y;
-        const distSq = dx * dx + dy * dy;
-        const minDist = 6;
-        if (distSq < minDist * minDist) return;
         
         const w = 48;
         const h = 56;
@@ -108,15 +102,9 @@ class WheatCropRenderer {
         
         this._lastHarvested.x = localX;
         this._lastHarvested.y = localY;
-        
-        // Add to crop amount (small increment per harvest action)
-        if (typeof gameUI !== 'undefined') {
-            gameUI.addCropAmount(1);
-        }
     }
     
     isFullyHarvested(ownedLandSet) {
-        // Check if enough of the wheat has been harvested
         if (typeof landManager === 'undefined') return false;
         
         const gridSize = landManager.gridSize;
@@ -126,9 +114,7 @@ class WheatCropRenderer {
         
         const harvestedPixels = this.harvestedPixels.size;
         const harvestedPercentage = (harvestedPixels / totalOwnedArea) * 100;
-        
-        // Consider fully harvested when 80% is done
-        return harvestedPercentage >= 80;
+        return harvestedPercentage >= 90;
     }
     
     getHarvestStats() {
@@ -170,7 +156,6 @@ window.testWheat = function(plotX = 0, plotY = 0, cellWidth = 100) {
     wheatRenderer.testWheatRender(plotX, plotY, cellWidth);
 };
 
-// Test harvest stats
 window.getHarvestStatus = function() {
     if (typeof wheatRenderer === 'undefined') {
         console.error('Wheat renderer not initialized');

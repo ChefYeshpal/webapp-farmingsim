@@ -12,7 +12,7 @@ class CropManager {
         this.plantNoBtn = null;
         
         // Growth system
-        this.growthStages = ['Seeds', 'Seedlings', 'Plantlings', 'Plantlings2', 'Wheat'];
+        this.growthStages = ['Seeds', 'Seedlings', 'Semi-Plantlings', 'Plantlings', 'Wheat'];
         this.currentStageIndex = -1;
         this.growthProgress = 0;
         this.growthDuration = 10000;
@@ -23,8 +23,8 @@ class CropManager {
         this.stageImages = {
             'Seeds': null,
             'Seedlings': null,
-            'Plantlings': null,
-            'Plantlings2': null
+            'Semi-Plantlings': null,
+            'Plantlings': null
         };
         
         // Threshold for showing the planting dialog (0.8% of owned land tilled - lowered for easier testing)
@@ -37,8 +37,8 @@ class CropManager {
         if (typeof loadImage === 'function') {
             this.stageImages['Seeds'] = loadImage('assets/seed.png');
             this.stageImages['Seedlings'] = loadImage('assets/seedLINGS.png');
+            this.stageImages['Semi-Plantlings'] = loadImage('assets/plantlings.png');
             this.stageImages['Plantlings'] = loadImage('assets/plantlings.png');
-            this.stageImages['Plantlings2'] = loadImage('assets/plantlings.png');
             this.seedImage = this.stageImages['Seeds'];
         }
         this.seedsLayer = createGraphics(PLAY_AREA, PLAY_AREA);
@@ -228,7 +228,9 @@ class CropManager {
         
         if (stageName === 'Seedlings') {
             seedSize = 18; 
-        } else if (stageName === 'Plantlings' || stageName === 'Plantlings2') {
+        } else if (stageName === 'Semi-Plantlings') {
+            seedSize = 21;
+        } else if (stageName === 'Plantlings') {
             seedSize = 24;
         }
         
@@ -272,8 +274,7 @@ class CropManager {
     
     getCurrentStageDuration() {
         const stageName = this.growthStages[this.currentStageIndex];
-        // Plantlings2 -> Wheat takes 20 seconds instead of 10
-        if (stageName === 'Plantlings2') {
+        if (stageName === 'Plantlings') {
             return 20000; // 20 seconds
         }
         return 10000; // 10 seconds for all other stages
