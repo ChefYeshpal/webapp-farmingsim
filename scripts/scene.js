@@ -23,7 +23,7 @@ function setup() {
     let canvas = createCanvas(CANVAS_SIZE, CANVAS_SIZE);
     canvas.parent('game-container');
     // enable continuous draw for moving objects
-    // noLoop(); // static for now, use loop() afterwards, just adding this so I remember what this does
+    // not using it, better to remove aint it?
 
     // player setup (playermovement.js)
     if (typeof setupPlayer === 'function') setupPlayer();
@@ -56,7 +56,7 @@ function draw() {
     drawField();
     drawBaseAndCover();
     
-    // *seed the land*
+    // *seed the land* lol italics dont even work...
     if (typeof cropManager !== 'undefined') {
         cropManager.drawSeeds();
         cropManager.updateGrowth();
@@ -104,35 +104,53 @@ function maybeEraseCover(canvasX, canvasY, playerState) {
 
     const localX = canvasX - BORDER_WIDTH;
     const localY = canvasY - BORDER_WIDTH;
-
-    if (typeof cropManager !== 'undefined' && cropManager.isHarvestable) {
+    const isHarvesting = (typeof cropManager !== 'undefined' && cropManager.isHarvestable);
+    if (isHarvesting) {
         harvestWheatAt(localX, localY);
-        
-        // ALSO check if there's untilled land and till it simultaneously
-        const pixel = coverLayer.get(localX + BORDER_WIDTH, localY + BORDER_WIDTH);
-        if (pixel[3] > 0) {
-            const dx = canvasX - _lastTilled.x;
-            const dy = canvasY - _lastTilled.y;
-            const distSq = dx * dx + dy * dy;
-            const minDist = 6; 
-            if (distSq >= minDist * minDist) {
-                eraseCoverAt(localX, localY, playerState);
-                _lastTilled.x = canvasX;
-                _lastTilled.y = canvasY;
-            }
-        }
-    } else {
-        const dx = canvasX - _lastTilled.x;
-        const dy = canvasY - _lastTilled.y;
-        const distSq = dx * dx + dy * dy;
-        const minDist = 6; 
-        if (distSq < minDist * minDist) return;
+    }
 
-        eraseCoverAt(localX, localY, playerState);
-        
+    // Convert previously recorded canvas coords to local layer coords
+    const lastLocalX = (_lastTilled.x === -9999) ? null : (_lastTilled.x - BORDER_WIDTH);
+    const lastLocalY = (_lastTilled.y === -9999) ? null : (_lastTilled.y - BORDER_WIDTH);
+
+    // If there's no last point yet, do a single erase now
+    if (lastLocalX === null || lastLocalY === null) {
+        if (isHarvesting) {
+            eraseCoverAt(localX, localY, playerState, { w: 64, h: 72 });
+        } else {
+            eraseCoverAt(localX, localY, playerState);
+        }
         _lastTilled.x = canvasX;
         _lastTilled.y = canvasY;
+        return;
     }
+
+    // Interpolate between last and current local positions and emit many erases
+    const dx = localX - lastLocalX;
+    const dy = localY - lastLocalY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 1) return;
+    const stepSize = isHarvesting ? 2 : 6;
+    const steps = Math.max(1, Math.ceil(dist / stepSize));
+
+    // Emit erases along the path. Avoid calling coverLayer.get() here because
+    // repeated get() causes expensive readbacks (getImageData) and the browser
+    // warns about willReadFrequently. Always erase, duplicates are harmless
+    // and this matches the smooth pre-harvest tilling behavior.
+    for (let i = 1; i <= steps; i++) {
+        const t = i / steps;
+        const ix = lastLocalX + dx * t;
+        const iy = lastLocalY + dy * t;
+
+        if (isHarvesting) {
+            eraseCoverAt(ix, iy, playerState, { w: 64, h: 72 });
+        } else {
+            eraseCoverAt(ix, iy, playerState);
+        }
+    }
+
+    _lastTilled.x = canvasX;
+    _lastTilled.y = canvasY;
 }
 
 function harvestWheatAt(localX, localY) {
@@ -141,9 +159,10 @@ function harvestWheatAt(localX, localY) {
     }
 }
 
-function eraseCoverAt(localX, localY, playerState) {
-    const w = 48;
-    const h = 56;
+function eraseCoverAt(localX, localY, playerState, opts) {
+    // Allow optional custom width/height (opts.w, opts.h)
+    const w = (opts && opts.w) ? opts.w : 48;
+    const h = (opts && opts.h) ? opts.h : 56;
 
     coverLayer.push();
     coverLayer.erase();

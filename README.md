@@ -7,7 +7,7 @@ In this game, the user is a farmer, who got a small plot of land from their gran
 
 - [ ] Farm land
     - [x] Should be divided into 9 chunks, the player initially has access to the bottom right chunk
-    - [ ] Other chunks can be bought for a certain price, with their price being different depending oN how far they are
+    - [ ] Other chunks can be bought for a certain price, with their price being different depending on how far they are
     - [ ] If the user spends a certain amount of time on an unpurchased farmland, the popo should show up
 - [ ] A tractor
     - [x] Should be controllable via wasd
@@ -34,11 +34,11 @@ In this game, the user is a farmer, who got a small plot of land from their gran
     - [ ] Background music
     - [ ] Tractor noises brrrr
     - [ ] Crop cropping noises
-- [ ] Some kinda animation difference from harvested crop vs growing crop
-    - [ ] Growing crop should go from green to slight yellow
-    - [ ] Harvesting crop should leave darker patches of yellow in harvested area
-    - [ ] Re-tilling the soil would leave dirl colour
-    - [ ] Then the user has to re-plant new seeds (should be an MCQ type thing, heh welcome back to school)
+- [x] Some kinda animation difference from harvested crop vs growing crop
+    - [x] Growing crop should go from green to slight yellow
+    - [x] Harvesting crop should leave darker patches of yellow in harvested area
+    - [x] Re-tilling the soil would leave dirt colour
+    - [x] Then the user has to re-plant new seeds
 
 ## Devlogs
 
@@ -84,6 +84,10 @@ In this game, the user is a farmer, who got a small plot of land from their gran
     - I forgor
 - 9 November 2025
     - Added wheat harvesting system
-    - Trying to add wheat selling system
-    -
+    - Added wheat selling system
+        - Sill gonna work on the selling mechanics and stuff
+        - Also gotta work on what getting more money really does... like, seriously...
+    - MASSIVLY updated the harvesting system
+        - untilled land was blotchyly getting tilled for some reason under the harvest
+        - Just used a simple fix to make it WAYYY close...
         

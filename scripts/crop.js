@@ -27,9 +27,9 @@ class CropManager {
             'Plantlings': null
         };
         
-        // Threshold for showing the planting dialog (0.8% of owned land tilled - lowered for easier testing)
-        // This means tilled land should be about 0.8% of the land area (roughly 279 pixels for a single plot, yeah I wipped out the calculator for this)
-        this.tillingThreshold = 0.8;
+    // land area (0-100).
+    // multiplier: 0.8 * shii
+    this.tillingThreshold = 1.3;
     }
     
     init() {
@@ -146,8 +146,6 @@ class CropManager {
         
         const stats = this.getTillingStats();
         
-        // Show dialog when threshold percentage of owned land is tilled
-        // percentageTilled is already in percentage form (0-100), so compare directly against threshold
         if (stats.percentageTilled >= this.tillingThreshold) {
             this.plantingDialogShown = true;
             this.showPlantingDialog();
@@ -275,9 +273,9 @@ class CropManager {
     getCurrentStageDuration() {
         const stageName = this.growthStages[this.currentStageIndex];
         if (stageName === 'Plantlings') {
-            return 20000; // 20 seconds
+            return 20000;
         }
-        return 10000; // 10 seconds for all other stages
+        return 10000;
     }
     
     updateGrowth() {
@@ -299,7 +297,6 @@ class CropManager {
         
         const currentDuration = this.getCurrentStageDuration();
         
-        // Calculate percentage for progress bar
         const percentage = (this.growthProgress / currentDuration) * 100;
         
         if (typeof gameUI !== 'undefined') {
@@ -486,7 +483,7 @@ window.skipToWheat = function() {
         return;
     }
     
-    // Skip all stages until wheat
+    // lol i think im depressed
     while (cropManager.currentStageIndex < cropManager.growthStages.length - 1) {
         cropManager.advanceStage();
     }
