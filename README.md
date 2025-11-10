@@ -3,33 +3,38 @@ you farm with a tractor, you buy more land, you make more money!
 
 In this game, the user is a farmer, who got a small plot of land from their grandpapi (such a rare story...) and have to farm with a tractor. They can buy neighbouring lands after achieving a certain amount and as the farm land is arranged in a grid like pattern, I think this would come into the theme of "grid" for this week?
 
+## Credts
+
+- Art by me
+- Sounds from SoundJay[https://www.soundjay.com/]
+    - Tractor[https://www.soundjay.com/tractor-sound-effects.html]
+        - tractor-idling-01.mp3[https://www.soundjay.com/transportation/sounds/tractor-idling-01.mp3]
+        - tractor-reversing-01.mp3[https://www.soundjay.com/transportation/sounds/tractor-reversing-01.mp3]
+        - tractor-working-03.mp3[https://www.soundjay.com/transportation/sounds/tractor-working-03.mp3]
+    - White Noise[https://www.soundjay.com/misc-sounds-2.html]
+        - white-noise-02.mp3[https://www.soundjay.com/misc/sounds/white-noise-02.mp3]
+        
 ## SCOOBY TOBI DOOOOOO
 
 - [ ] Farm land
     - [x] Should be divided into 9 chunks, the player initially has access to the bottom right chunk
     - [ ] Other chunks can be bought for a certain price, with their price being different depending on how far they are
-    - [ ] If the user spends a certain amount of time on an unpurchased farmland, the popo should show up
+    - [x] User cannot go onto unpurchased land
 - [ ] A tractor
     - [x] Should be controllable via wasd
     - [ ] Should be upgradable?
 - [ ] Info panel
-    - [ ] Contains info of current season
-    - [ ] Contains info of current crop
-        - [ ] Info of current growth of crop
-        - [ ] Info on type of crop
+    - [x] Contains info of current crop
+        - [x] Info of current growth of crop
+        - [x] Info on type of crop (has currently only got wheat)
     - [ ] Info on tractor durability
         - The more they move the tractor in un-cropped land, the more it's durability decreases?
         - I dont really think this would be needed cause tractors are stronk af
-    - [ ] Time progression
-- [ ] Some seasons?
-    - UI should be kinda based on them?
+    - [x] Time progression
 - [x] Ability to buy neighbouring land
     - [x] Considering the game container would be divided into 9 parts, and user has initially only 1 part
     - [x] Can use arrow keys to navigate land purchase
     - [x] Hotkey for land perch start (`b`)
-- [ ] Seasonal crop variation
-    - [ ] if they plant the wrong crop in the wrong season then crop can fail
-    - [ ] Check how to do this though...
 - [ ] Music & Sounds
     - [ ] Background music
     - [ ] Tractor noises brrrr
