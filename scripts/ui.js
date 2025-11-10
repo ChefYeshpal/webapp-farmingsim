@@ -20,7 +20,6 @@ class GameUI {
         this.progressIndicator = null;
         this.ownedLandCount = 1;
         this.totalLandCount = 9;
-        // Title is intentionally static. Do not overwrite the `#date-display` element.
         
         this.isPaused = false;
         this.timeMultiplier = 1;
@@ -91,8 +90,6 @@ class GameUI {
         if (this.speed5xBtn) {
             this.speed5xBtn.classList.remove('active');
         }
-        
-        // Add active class to the current speed button
         if (this.timeMultiplier === 2 && this.speed2xBtn) {
             this.speed2xBtn.classList.add('active');
         } else if (this.timeMultiplier === 5 && this.speed5xBtn) {
@@ -210,7 +207,7 @@ class GameUI {
 
 const gameUI = new GameUI();
 
-// Initialize when DOM is ready, how does olof have future generations? like... will elsa make him a kid out of snow?
+// Initialize when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         gameUI.init();

@@ -132,7 +132,6 @@ class CropManager {
         this.plantingDialogShown = false;
     }
     
-    // Track when land is tilled
     recordTilling(localX, localY) {
         const key = `${Math.round(localX)},${Math.round(localY)}`;
         this.tilledPixels.add(key);
@@ -271,9 +270,9 @@ class CropManager {
     getCurrentStageDuration() {
         const stageName = this.growthStages[this.currentStageIndex];
         if (stageName === 'Plantlings') {
-            return 20000; // 20 seconds
+            return 20000;
         }
-        return 10000; // 10 seconds for all other stages
+        return 10000;
     }
     
     updateGrowth() {
@@ -311,7 +310,6 @@ class CropManager {
         this.currentStageIndex++;
         
         if (this.currentStageIndex >= this.growthStages.length) {
-            // All stages complete
             this.isGrowing = false;
             if (typeof gameUI !== 'undefined') {
                 gameUI.setCropProgress(100);
@@ -427,7 +425,7 @@ window.getTillingStatus = function() {
 
 window.checkTilling = window.getTillingStatus;
 
-// yet another testing function: Auto-till all owned land and show the planting dialog
+// Auto-till all owned land and show the planting dialog
 window.autoTill = function() {
     if (typeof cropManager === 'undefined') {
         console.error('CropManager not initialized');
@@ -475,14 +473,12 @@ window.skipStage = function() {
     cropManager.advanceStage();
 };
 
-// Quick function to reach wheat stage for testing
 window.skipToWheat = function() {
     if (typeof cropManager === 'undefined') {
         console.error('CropManager not initialized');
         return;
     }
     
-    // Skip all stages until wheat
     while (cropManager.currentStageIndex < cropManager.growthStages.length - 1) {
         cropManager.advanceStage();
     }

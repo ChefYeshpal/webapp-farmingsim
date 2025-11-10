@@ -108,14 +108,12 @@ class WheatCropRenderer {
         this.wheatLayer.noErase();
         this.wheatLayer.pop();
         
-        // Record harvested area
         const key = `${Math.round(localX)},${Math.round(localY)}`;
         this.harvestedPixels.add(key);
         
         this._lastHarvested.x = localX;
         this._lastHarvested.y = localY;
         
-        // Add to crop amount (small increment per harvest action)
         if (typeof gameUI !== 'undefined') {
             gameUI.addCropAmount(1);
         }
@@ -136,12 +134,10 @@ class WheatCropRenderer {
         
         const stats = this.getHarvestStats();
         
-        // Consider fully harvested when 80% is done
         return stats.percentageHarvested >= 80;
     }
     
     getHarvestStats(forceRefresh = false) {
-        // Return cached stats if available and not forcing refresh
         if (!forceRefresh && this._cachedStats !== null) {
             return this._cachedStats;
         }
@@ -160,7 +156,6 @@ class WheatCropRenderer {
         let wheatPixelsRemaining = 0;
         let totalPixelsChecked = 0;
         
-        // Increased sample rate for better performance (check every 4 pixels instead of 2)
         const sampleRate = 4;
         
         this.wheatLayer.loadPixels();
@@ -178,7 +173,6 @@ class WheatCropRenderer {
             for (let x = startX; x < endX; x += sampleRate) {
                 for (let y = startY; y < endY; y += sampleRate) {
                     totalPixelsChecked++;
-                    // Calculate pixel index in the pixels array
                     const index = (y * layerWidth + x) * 4;
                     // Check alpha channel (index + 3)
                     if (pixels[index + 3] > 0) {

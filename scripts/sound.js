@@ -1,14 +1,12 @@
 // Tractor sound manager
-// Loads three tractor audio files from the `assets/` folder and switches between
-// them depending on the tractor movement state (idle / forward / reverse).
+// Loads three tractor audio files from the `assets/` folder and switches between them depending on the tractor movement state (idle / forward / reverse).
 //
 // Behavior:
 // - Idle (player.speed approximately 0): `tractor-idling-01.mp3` loops and plays while idle.
 // - Moving forward (player.speed > threshold): `tractor-working-03.mp3` loops; idle stops.
 // - Reversing (player.speed < -threshold): `tractor-reversing-01.mp3` loops; other sounds stop.
 //
-// The code exposes `setupSounds()` and `updateSounds()` which are called from
-// the main `setup()` / `draw()` in `scene.js`.
+// The code exposes `setupSounds()` and `updateSounds()` which are called from the main `setup()` / `draw()` in `scene.js`.
 
 let _tractorSounds = {
 	idle: null,
@@ -64,7 +62,6 @@ function _stopSound(key) {
 		s.pause();
 		s.currentTime = 0;
 	} catch (e) {
-		// ignore this pls
 	}
 }
 

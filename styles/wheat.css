@@ -18,7 +18,7 @@
     border-radius: 50%;
 }
 
-/* Animation for wheat swaying (future use) */
+/* Animation for wheat swaying (doesn't work, but who's gonna remove this hm?) */
 @keyframes wheat-sway {
     0%, 100% {
         transform: rotate(0deg);
