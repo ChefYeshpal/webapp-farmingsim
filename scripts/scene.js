@@ -162,6 +162,20 @@ function harvestWheatAt(localX, localY) {
 }
 
 function eraseCoverAt(localX, localY, playerState, opts) {
+    const REVERSING_THRESHOLD = 0.02;
+    let isReversing = false;
+    if (playerState && typeof playerState.speed === 'number') {
+        isReversing = playerState.speed < -REVERSING_THRESHOLD;
+    } else if (typeof player !== 'undefined' && typeof player.speed === 'number') {
+        isReversing = player.speed < -REVERSING_THRESHOLD;
+    } else if (typeof inputState !== 'undefined' && inputState.reverse) {
+        isReversing = true;
+    }
+
+    if (isReversing) {
+        return;
+    }
+
     // Allow optional custom width/height (opts.w, opts.h)
     const w = (opts && opts.w) ? opts.w : 48;
     const h = (opts && opts.h) ? opts.h : 56;

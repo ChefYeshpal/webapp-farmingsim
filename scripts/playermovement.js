@@ -7,7 +7,7 @@ let player = {
 	y: 0,
 	angle: 0, 
 	speed: 0,
-	maxSpeed: 2.0,
+	maxSpeed: 1.2,
 	rotationSpeed: 0.06
 };
 
@@ -113,6 +113,6 @@ function keyReleased() {
 }
 
 function getPlayerState() {
-	return { x: player.x, y: player.y, angle: player.angle };
+	return { x: player.x, y: player.y, angle: player.angle, speed: player.speed };
 }
 

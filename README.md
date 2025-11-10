@@ -1,7 +1,19 @@
 # webapp-farmingsim
-you farm with a tractor, you buy more land, you make more money!
 
-In this game, the user is a farmer, who got a small plot of land from their grandpapi (such a rare story...) and have to farm with a tractor. They can buy neighbouring lands after achieving a certain amount and as the farm land is arranged in a grid like pattern, I think this would come into the theme of "grid" for this week?
+Welcome to farming simulator!!!! In here, you're a very simple farmer who needs to buy the other land and **DOMINATE THE FARMING INDUSTRY!!!**. Just farm, sell, and buy!!!!.
+This is a game for week 6 of Siege[siege.hackclub.com], and this weeks theme is "Grid". So naturally, this fits the theme because of the grid like pattern of the land plots, and how the user has to farm in a grid like pattern (I have such a big big brain...)
+
+## How to play?
+
+- Use W/S for movement and A/D for rotation
+- Press `"b"` or click the number below `land` in the left box to get into land-selector mode
+    - Use arrows to navigate which plot you wish to buy
+    - Press `enter` to buy that selected plot
+    - Press `esc` to cancel the purchase
+- Sell your crop after harvesting!!!
+    - A button will automatically appear in the bottom left
+    - Click that, set the price, sell your crop
+- Nothing else really, it's kinda simple...
 
 ## Credts
 
@@ -13,7 +25,7 @@ In this game, the user is a farmer, who got a small plot of land from their gran
         - tractor-working-03.mp3[https://www.soundjay.com/transportation/sounds/tractor-working-03.mp3]
     - White Noise[https://www.soundjay.com/misc-sounds-2.html]
         - white-noise-02.mp3[https://www.soundjay.com/misc/sounds/white-noise-02.mp3]
-        
+
 ## SCOOBY TOBI DOOOOOO
 
 - [ ] Farm land
@@ -35,10 +47,10 @@ In this game, the user is a farmer, who got a small plot of land from their gran
     - [x] Considering the game container would be divided into 9 parts, and user has initially only 1 part
     - [x] Can use arrow keys to navigate land purchase
     - [x] Hotkey for land perch start (`b`)
-- [ ] Music & Sounds
-    - [ ] Background music
-    - [ ] Tractor noises brrrr
-    - [ ] Crop cropping noises
+- [x] Music & Sounds
+    - [x] Background music (tractor idle)
+    - [x] Tractor noises brrrr
+    - [ ] Crop cropping noises (whitenoise?)
 - [x] Some kinda animation difference from harvested crop vs growing crop
     - [x] Growing crop should go from green to slight yellow
     - [x] Harvesting crop should leave darker patches of yellow in harvested area
