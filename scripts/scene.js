@@ -22,11 +22,11 @@ let _lastTilled = { x: -9999, y: -9999 };
 function setup() {
     let canvas = createCanvas(CANVAS_SIZE, CANVAS_SIZE);
     canvas.parent('game-container');
-    // enable continuous draw for moving objects
-    // not using it, better to remove aint it?
-
     // player setup (playermovement.js)
     if (typeof setupPlayer === 'function') setupPlayer();
+
+    // sound setup (scripts/sound.js)
+    if (typeof setupSounds === 'function') setupSounds();
 
     baseStripesLayer = createGraphics(PLAY_AREA, PLAY_AREA);
     coverLayer = createGraphics(PLAY_AREA, PLAY_AREA);
@@ -71,6 +71,8 @@ function draw() {
     }
     
     if (typeof updatePlayer === 'function') updatePlayer();
+    // update sounds to reflect current tractor state (idle/forward/reverse)
+    if (typeof updateSounds === 'function') updateSounds();
     if (typeof getPlayerState === 'function') {
         const p = getPlayerState();
         maybeEraseCover(p.x, p.y, p);
