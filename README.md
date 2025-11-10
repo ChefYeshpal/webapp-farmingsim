@@ -3,6 +3,13 @@
 Welcome to farming simulator!!!! In here, you're a very simple farmer who needs to buy the other land and **DOMINATE THE FARMING INDUSTRY!!!**. Just farm, sell, and buy!!!!.
 This is a game for week 6 of [Siege](https://sieg.hackclub.com/), and this week's theme is "Grid". So naturally, this fits the theme because of the grid-like pattern of the land plots, and how the user has to farm in a grid-like pattern (I have such a big big brain...)
 
+## Tech Stack
+
+Super simple stuff:
+- **[p5.js](https://p5js.org/)** - Canvas rendering and game loop
+- **Vanilla JavaScript** - Game logic
+- **HTML/CSS** - UI and styling
+
 ## How to play?
 
 - Use W/S for movement and A/D for rotation
@@ -30,18 +37,14 @@ This is a game for week 6 of [Siege](https://sieg.hackclub.com/), and this week'
 
 - [ ] Farm land
     - [x] Should be divided into 9 chunks, the player initially has access to the bottom right chunk
-    - [ ] Other chunks can be bought for a certain price, with their price being different depending on how far they are
+    - [x] Other chunks can be bought for a certain price, with their price being different depending on how far they are
     - [x] User cannot go onto unpurchased land
-- [ ] A tractor
+- [x] A tractor
     - [x] Should be controllable via wasd
-    - [ ] Should be upgradable?
 - [ ] Info panel
     - [x] Contains info of current crop
         - [x] Info of current growth of crop
         - [x] Info on type of crop (has currently only got wheat)
-    - [ ] Info on tractor durability
-        - The more they move the tractor in un-cropped land, the more it's durability decreases?
-        - I dont really think this would be needed cause tractors are stronk af
     - [x] Time progression
 - [x] Ability to buy neighbouring land
     - [x] Considering the game container would be divided into 9 parts, and user has initially only 1 part
@@ -50,12 +53,12 @@ This is a game for week 6 of [Siege](https://sieg.hackclub.com/), and this week'
 - [x] Music & Sounds
     - [x] Background music (tractor idle)
     - [x] Tractor noises brrrr
-    - [ ] Crop cropping noises (whitenoise?)
 - [x] Some kinda animation difference from harvested crop vs growing crop
     - [x] Growing crop should go from green to slight yellow
     - [x] Harvesting crop should leave darker patches of yellow in harvested area
     - [x] Re-tilling the soil would leave dirt colour
     - [x] Then the user has to re-plant new seeds
+- [x] Tutorial
 
 ## Devlogs
 
@@ -116,3 +119,4 @@ This is a game for week 6 of [Siege](https://sieg.hackclub.com/), and this week'
         - 1st row is 500 usd
         - 2nd row is 1k usd
         - 3rd row is 2k usd
+    - Added tutorial
