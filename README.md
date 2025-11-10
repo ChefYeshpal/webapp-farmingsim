@@ -112,4 +112,7 @@ This is a game for week 6 of [Siege](https://sieg.hackclub.com/), and this week'
     - Updated tractor movement
         - It's a little slower now
         - Reversing doesn't till anymore
-        
+    - Added land buying systems
+        - 1st row is 500 usd
+        - 2nd row is 1k usd
+        - 3rd row is 2k usd
