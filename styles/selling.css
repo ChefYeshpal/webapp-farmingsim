@@ -10,7 +10,7 @@
     border: 4px dashed #8B4513;
     border-radius: 12px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: background-color 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
     z-index: 100;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     outline: 3px dashed #2d5a3d;
@@ -20,9 +20,9 @@
 }
 
 .sell-button:hover {
-    background-color: #5a9c6b;
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    background-color: #6fbf91;
+    filter: brightness(1.06);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
 }
 
 .sell-button:active {
@@ -165,6 +165,7 @@
 .sell-dialog-box {
     min-width: 500px;
     max-width: 600px;
+    left: 42px;
 }
 
 .sell-info {
@@ -185,12 +186,6 @@
 
 .sell-info-row:last-child {
     border-bottom: none;
-}
-
-.sell-label {
-    font-size: 16px;
-    font-weight: bold;
-    color: #8B4513;
 }
 
 .sell-value {

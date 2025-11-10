@@ -26,10 +26,8 @@ class CropManager {
             'Semi-Plantlings': null,
             'Plantlings': null
         };
-        
-    // land area (0-100).
-    // multiplier: 0.8 * shii
-    this.tillingThreshold = 1.3;
+
+    this.tillingThreshold = 1.6;
     }
     
     init() {

@@ -107,4 +107,9 @@ This is a game for week 6 of Siege[siege.hackclub.com], and this weeks theme is 
     - MASSIVLY updated the harvesting system
         - untilled land was blotchyly getting tilled for some reason under the harvest
         - Just used a simple fix to make it WAYYY close...
+- 10 November 2025
+    - Added sounds
+    - Updated tractor movement
+        - It's a little slower now
+        - Reversing doesn't till anymore
         
