@@ -291,6 +291,18 @@ class LandPurchaseManager {
     executePurchase() {
         const key = `${this.currentPlotX},${this.currentPlotY}`;
         this.ownedLand.add(key);
+
+        const price = this.calculateLandPrice(this.currentPlotX, this.currentPlotY);
+        if (typeof marketSystem !== 'undefined') {
+            if (typeof marketSystem.getMoney === 'function') {
+                const current = marketSystem.getMoney();
+                marketSystem.money = Math.max(0, current - price);
+            } else if (typeof marketSystem.money === 'number') {
+                marketSystem.money = Math.max(0, marketSystem.money - price);
+            }
+            if (typeof marketSystem.updateMoneyDisplay === 'function') marketSystem.updateMoneyDisplay();
+        }
+
         if (typeof gameUI !== 'undefined') {
             gameUI.addLand();
         }
@@ -298,10 +310,18 @@ class LandPurchaseManager {
     
     confirmPurchase() {
         this.hideDialog();
-        
+        const price = this.calculateLandPrice(this.currentPlotX, this.currentPlotY);
+        const playerMoney = (typeof marketSystem !== 'undefined' && typeof marketSystem.getMoney === 'function') ? marketSystem.getMoney() : (typeof marketSystem !== 'undefined' ? marketSystem.money : 0);
+
+        if (playerMoney < price) {
+            const shortfall = price - playerMoney;
+            this.showInsufficientFundsNotification(shortfall);
+            return;
+        }
+
         // Check for seed planting
         const hasPlantedSeeds = typeof cropManager !== 'undefined' && cropManager.seedsPlanted;
-        
+
         if (hasPlantedSeeds) {
             this.showWarningDialog();
         } else {
@@ -314,9 +334,36 @@ class LandPurchaseManager {
     }
     
     calculateLandPrice(x, y) {
-        // so many zeros, I like zeros
-        // Land price should prolly become more expensive the farther it is from the og plot?
+        if (y === 2) return 500;
+        if (y === 1) return 1000;
+        if (y === 0) return 2000;
         return 1000;
+    }
+
+    showInsufficientFundsNotification(amountNeeded) {
+        const id = 'purchase-notification';
+        let el = document.getElementById(id);
+        if (el) el.remove();
+        el = document.createElement('div');
+        el.id = id;
+        el.textContent = `Not enough money. You need $${amountNeeded} more to buy this plot.`;
+        Object.assign(el.style, {
+            position: 'fixed',
+            top: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: '#ffffff',
+            color: '#000000',
+            border: '1px solid #333',
+            padding: '8px 12px',
+            zIndex: 9999,
+            fontFamily: 'sans-serif'
+        });
+        document.body.appendChild(el);
+        setTimeout(() => {
+            const existing = document.getElementById(id);
+            if (existing) existing.remove();
+        }, 3000);
     }
     
     isLandOwned(x, y) {
