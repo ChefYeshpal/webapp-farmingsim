@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="styles/styles.css">
         <link rel="stylesheet" href="styles/wheat.css">
         <link rel="stylesheet" href="styles/selling.css">
+        <link rel="stylesheet" href="styles/tutorial.css">
     </head>
     <body>
         <div id="ui-panel">
@@ -54,6 +55,13 @@
             </div>
         </div>
         
+        <div id="tutorial-overlay" class="tutorial-overlay">
+            <div class="tutorial-content">
+                <p id="tutorial-text" class="tutorial-text"></p>
+                <button id="tutorial-continue-btn" class="tutorial-btn">Continue</button>
+            </div>
+        </div>
+        
         <div id="game-container">
             <canvas id="gameCanvas"></canvas>
         </div>
@@ -66,6 +74,7 @@
     <script src="scripts/script.js"></script>
     <script src="scripts/playermovement.js"></script>
     <script src="scripts/sound.js"></script>
+    <script src="scripts/tutorial.js"></script>
     <script src="scripts/scene.js"></script>
     </body>
 </html>
