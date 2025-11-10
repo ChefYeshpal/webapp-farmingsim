@@ -101,7 +101,7 @@ class MarketSystem {
                         <button id="sell-confirm-btn" class="dialog-btn yes-btn">Sell!</button>
                         <button id="sell-cancel-btn" class="dialog-btn no-btn">Cancel</button>
                     </div>
-                    <p class="dialog-hint">Press Enter to confirm, ESC to cancel</p>
+                    <p class="dialog-hint">heh.</p>
                 </div>
             </div>
         `;
@@ -209,15 +209,17 @@ class MarketSystem {
         const pricePerUnit = parseFloat(this.priceInput.value) || this.basePrice;
         const priceRatio = pricePerUnit / this.basePrice;
         
-        // Calculate demand based on price elasticity
-        // Higher prices reduce demand exponentially
-        const demandMultiplier = Math.pow(1 / priceRatio, this.priceElasticity);
-        const salesVolume = Math.floor(this.harvestAmount * Math.min(demandMultiplier, 1));
+        // Calculate demand based on quadratic decay
+        // Higher prices reduce demand quadratically (much more dramatic falloff)
+        // Formula: demand = 1 / (priceRatio^2)
+        // This means: 2x price = 1/4 sales, 10x price = 1/100 sales, 100x price = 1/10000 sales
+        const demandMultiplier = 1 / Math.pow(priceRatio, 2);
+        const salesVolume = Math.max(0, Math.floor(this.harvestAmount * Math.min(demandMultiplier, 1)));
         const revenue = salesVolume * pricePerUnit;
         
         if (this.estimatedSalesDisplay) {
             this.estimatedSalesDisplay.textContent = `${salesVolume} units`;
-            const salesPercent = (salesVolume / this.harvestAmount) * 100;
+            const salesPercent = this.harvestAmount > 0 ? (salesVolume / this.harvestAmount) * 100 : 0;
             if (salesPercent >= 80) {
                 this.estimatedSalesDisplay.style.color = '#2d6a4f';
             } else if (salesPercent >= 50) {
@@ -235,8 +237,9 @@ class MarketSystem {
     confirmSale() {
         const pricePerUnit = parseFloat(this.priceInput.value) || this.basePrice;
         const priceRatio = pricePerUnit / this.basePrice;
-        const demandMultiplier = Math.pow(1 / priceRatio, this.priceElasticity);
-        const salesVolume = Math.floor(this.harvestAmount * Math.min(demandMultiplier, 1));
+        
+        const demandMultiplier = 1 / Math.pow(priceRatio, 2);
+        const salesVolume = Math.max(0, Math.floor(this.harvestAmount * Math.min(demandMultiplier, 1)));
         const revenue = salesVolume * pricePerUnit;
         
         this.money += revenue;
