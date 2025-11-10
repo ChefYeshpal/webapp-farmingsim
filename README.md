@@ -1,7 +1,7 @@
 # webapp-farmingsim
 
 Welcome to farming simulator!!!! In here, you're a very simple farmer who needs to buy the other land and **DOMINATE THE FARMING INDUSTRY!!!**. Just farm, sell, and buy!!!!.
-This is a game for week 6 of Siege[siege.hackclub.com], and this weeks theme is "Grid". So naturally, this fits the theme because of the grid like pattern of the land plots, and how the user has to farm in a grid like pattern (I have such a big big brain...)
+This is a game for week 6 of [Siege](https://sieg.hackclub.com/), and this week's theme is "Grid". So naturally, this fits the theme because of the grid-like pattern of the land plots, and how the user has to farm in a grid-like pattern (I have such a big big brain...)
 
 ## How to play?
 
@@ -15,16 +15,16 @@ This is a game for week 6 of Siege[siege.hackclub.com], and this weeks theme is 
     - Click that, set the price, sell your crop
 - Nothing else really, it's kinda simple...
 
-## Credts
+## Credits
 
 - Art by me
-- Sounds from SoundJay[https://www.soundjay.com/]
-    - Tractor[https://www.soundjay.com/tractor-sound-effects.html]
-        - tractor-idling-01.mp3[https://www.soundjay.com/transportation/sounds/tractor-idling-01.mp3]
-        - tractor-reversing-01.mp3[https://www.soundjay.com/transportation/sounds/tractor-reversing-01.mp3]
-        - tractor-working-03.mp3[https://www.soundjay.com/transportation/sounds/tractor-working-03.mp3]
-    - White Noise[https://www.soundjay.com/misc-sounds-2.html]
-        - white-noise-02.mp3[https://www.soundjay.com/misc/sounds/white-noise-02.mp3]
+- Sounds from [SoundJay](https://www.soundjay.com/)
+    - [Tractor sounds collection](https://www.soundjay.com/tractor-sound-effects.html)
+        - [tractor-idling-01.mp3](https://www.soundjay.com/transportation/sounds/tractor-idling-01.mp3)
+        - [tractor-reversing-01.mp3](https://www.soundjay.com/transportation/sounds/tractor-reversing-01.mp3)
+        - [tractor-working-03.mp3](https://www.soundjay.com/transportation/sounds/tractor-working-03.mp3)
+    - [White Noise collection](https://www.soundjay.com/misc-sounds-2.html)
+        - [white-noise-02.mp3](https://www.soundjay.com/misc/sounds/white-noise-02.mp3)
 
 ## SCOOBY TOBI DOOOOOO
 
