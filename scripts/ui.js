@@ -20,6 +20,10 @@ class GameUI {
         this.progressIndicator = null;
         this.ownedLandCount = 1;
         this.totalLandCount = 9;
+    // When true, the header/title remains static in the DOM and
+    // `updateDisplay()` will not overwrite it. Set to false to restore
+    // the dynamic day/season/year display.
+    this.useStaticTitle = true;
         
         this.isPaused = false;
         this.timeMultiplier = 1;
@@ -108,7 +112,7 @@ class GameUI {
     }
     
     updateDisplay() {
-        if (this.dateDisplay) {
+        if (!this.useStaticTitle && this.dateDisplay) {
             this.dateDisplay.textContent = `Day ${this.currentDay}, ${this.currentSeason}, Year ${this.currentYear}`;
         }
         
